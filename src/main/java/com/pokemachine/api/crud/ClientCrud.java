@@ -21,6 +21,9 @@ public class ClientCrud implements DBCrud<MClient> {
      */
     private Connection connection = DBService.getInstance().getConnection();
 
+    /**
+     * Instance of Class
+     */
     private static ClientCrud instance;
     
     /**
@@ -152,62 +155,11 @@ public class ClientCrud implements DBCrud<MClient> {
 
     @Override
     public DBResult<MClient> getFilteredData(int limit, String search) {
-        String sqlCount = "SELECT COUNT(*) AS TOTAL FROM CLIENT";
-        String sql = "SELECT * FROM CLIENT CLI_ID LIMIT " + limit;
-
-        if (search != null) {
-            sql = "SELECT * FROM CLIENT WHERE " +
-            "CLI_FULL_NAME LIKE '%"+ search +"%' OR " +
-            "CLI_RG LIKE '%" + search + "%' OR " +
-            "CLI_CPF LIKE '%" + search + "%' OR " +
-            "CLI_BIRTHDAY LIKE '%" + search + "%' OR " +
-            "CLI_ID = '" + search + "' LIMIT " + limit;
-
-            sqlCount = "SELECT COUNT(*) AS TOTAL FROM CLIENT WHERE " +
-            "CLI_FULL_NAME LIKE '%"+ search +"%' OR " +
-            "CLI_RG LIKE '%" + search + "%' OR " +
-            "CLI_CPF LIKE '%" + search + "%' OR " +
-            "CLI_BIRTHDAY LIKE '%" + search + "%' OR " +
-            "CLI_ID = '" + search + "' LIMIT " + limit;
-        }
-
-        try {
-            Statement stmt1 = this.connection.createStatement();
-            Statement stmt2 = this.connection.createStatement();
-
-            ResultSet resultTotal = stmt1.executeQuery(sqlCount);
-            ResultSet result = stmt2.executeQuery(sql);
-
-            List<MClient> lClient = new ArrayList<MClient>();
-            int total = 0;
-
-            while(result.next()) {
-                MClient client = MClient.build()
-                .setCLI_ID(result.getInt(1))
-                .setCLI_FULL_NAME(result.getString(2))
-                .setCLI_RG(result.getString(3))
-                .setCLI_CPF(result.getString(4))
-                .setCLI_BIRTHDAY(result.getString(5));
-
-                lClient.add(client);
-            }
-
-            if (resultTotal.next()) {
-
-                total = resultTotal.getInt(1);
-
-            }
-
-            return new DBResult<MClient>().setItems(lClient).setTotalItems(total);
-
-        } catch (Exception e) {
-            throw new Error(SystemUtil.log("Falha ao Buscar Clientes - " + e.getMessage()));
-        }
-
+        return new DBResult<MClient>().setItems(new ArrayList<MClient>()).setTotalItems(0);
     }
 
     @Override
-    public MClient getDataByID(int id) {
+    public List<MClient> getDataByID(int id) {
 
         String sql = "SELECT * FROM CLIENT WHERE CLI_ID = '" + id + "'";
 
@@ -216,17 +168,20 @@ public class ClientCrud implements DBCrud<MClient> {
             
             ResultSet result = stmt.executeQuery(sql);
 
-            MClient client = MClient.build();
+            List<MClient> lClient = new ArrayList<MClient>();
 
             while(result.next()) {
-                client.setCLI_ID(result.getInt(1));
-                client.setCLI_FULL_NAME(result.getString(2));
-                client.setCLI_RG(result.getString(3));
-                client.setCLI_CPF(result.getString(4));
-                client.setCLI_BIRTHDAY(result.getString(5));
+                MClient client = MClient.build()
+                .setCLI_ID(result.getInt(1))
+                .setCLI_FULL_NAME(result.getString(2))
+                .setCLI_RG(result.getString(3))
+                .setCLI_CPF(result.getString(4))
+                .setCLI_BIRTHDAY(result.getString(5));
+                
+                lClient.add(client);
             }
 
-            return client;
+            return lClient;
 
         } catch (Exception e) {
             throw new Error(SystemUtil.log("Falha ao Buscar Cliente - " + e.getMessage()));

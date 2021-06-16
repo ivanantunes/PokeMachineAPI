@@ -1,6 +1,5 @@
 package com.pokemachine.api.routers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.pokemachine.api.crud.ClientCrud;
@@ -128,16 +127,23 @@ public class RClient implements RouterCrud<MClient> {
         }
 
         try {
-            List<MClient> lClients = crud.getAll(data.getCLI_RG());
+            List<MClient> lClients = crud.getDataByID(data.getCLI_ID());
+
+            if (lClients.size() != 1 || lClients.size() == 1 && lClients.get(0).getCLI_ID() != data.getCLI_ID()) {
+                message.setCode(code).setMessage("Cliente Não Econtrado com ID " + data.getCLI_ID()).setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            lClients = crud.getAll(data.getCLI_RG());
             
-            if (lClients.size() > 1 || lClients.size() == 1 && lClients.get(0).getCLI_ID() != data.getCLI_ID()) {
+            if (lClients.size() != 1 || lClients.size() == 1 && lClients.get(0).getCLI_ID() != data.getCLI_ID()) {
                 message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getCLI_RG()).setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
             lClients = crud.getAll(data.getCLI_CPF());
 
-            if (lClients.size() > 1 || lClients.size() == 1 && lClients.get(0).getCLI_ID() != data.getCLI_ID()) {
+            if (lClients.size() != 1 || lClients.size() == 1 && lClients.get(0).getCLI_ID() != data.getCLI_ID()) {
                 message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getCLI_CPF()).setError("");
                 return ResponseEntity.status(code).body(message);
             }
@@ -166,9 +172,10 @@ public class RClient implements RouterCrud<MClient> {
 
         try {
             
-            MClient client = crud.getDataByID(id);
+            List<MClient> client = crud.getDataByID(id);
 
-            if (client.getCLI_ID() == 0) {
+            if (client.size() != 1 || client.size() == 1 && client.get(0).getCLI_ID() != id) {
+                code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Cliente Não Econtrado.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
@@ -186,38 +193,13 @@ public class RClient implements RouterCrud<MClient> {
     }
 
     @Override
-    @GetMapping("/get/all/client")
-    public ResponseEntity<List<MClient>> getAll(@RequestParam(required = false) String search) {
-        int code = HttpResponse.OK;
-        List<MClient> lClient = new ArrayList<MClient>();
-
-        try {
-            
-            lClient = crud.getAll(search);
-
-        } catch (Exception e) {
-            code = HttpResponse.BAD_REQUEST;
-        }
-
-        return ResponseEntity.status(code).body(lClient);
+    public ResponseEntity<List<MClient>> getAll(String search) {
+        return null;
     }
 
     @Override
-    @GetMapping("/get/filter/client")
-    public ResponseEntity<DBResult<MClient>> getFilteredData(@RequestParam int limit, @RequestParam(required = false) String search) {
-        int code = HttpResponse.OK;
-        DBResult<MClient> dbResult = new DBResult<MClient>();
-
-
-        try {
-            
-            dbResult = crud.getFilteredData(limit, search);
-
-        } catch (Exception e) {
-            code = HttpResponse.BAD_REQUEST;
-        }
-
-        return ResponseEntity.status(code).body(dbResult);
+    public ResponseEntity<DBResult<MClient>> getFilteredData(int limit, String search) {
+        return null;
     } 
 
 }

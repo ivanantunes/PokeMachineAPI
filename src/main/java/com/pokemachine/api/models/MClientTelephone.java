@@ -9,17 +9,17 @@ public class MClientTelephone {
     /**
      * Client Telephone ID
      */
-    private int CLT_ID;
+    private int CLT_ID = 0;
 
     /**
      * Client ID
      */
-    private int CLT_CLI_ID;
+    private int CLT_CLI_ID = 0;
 
     /**
      * Client Telephone
      */
-    private String CLT_TELEPHONE;
+    private String CLT_TELEPHONE = "";
 
     /**
      * Constructor

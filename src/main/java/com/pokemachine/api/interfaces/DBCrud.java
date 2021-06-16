@@ -48,8 +48,8 @@ public interface DBCrud<X> {
     /**
      * Get Data by ID
      * @param id - ID of Data
-     * @return Data
+     * @return List of Data
      */
-    public abstract X getDataByID(int id);
+    public abstract List<X> getDataByID(int id);
 
 }
