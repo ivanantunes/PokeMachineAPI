@@ -19,7 +19,7 @@ public class HttpMessage {
     /**
      * Http Simple Message
      */
-    private String message;
+    private String message = "";
 
     /**
      * Constructor
