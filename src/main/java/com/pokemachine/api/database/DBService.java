@@ -63,22 +63,18 @@ public class DBService {
      * @return Class of DBService
      */
     public static DBService getInstance() {
-
         if (DBService.instance == null) {
             DBService.instance = new DBService();
         }
 
         return DBService.instance;
-
     }
 
     /**
      * Destroy Instance of Class
      */
     public static void destroyInstance() {
-
         DBService.instance = null;
-
     }
 
     /**
