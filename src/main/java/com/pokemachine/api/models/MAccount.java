@@ -1,6 +1,6 @@
 package com.pokemachine.api.models;
 
-import com.pokemachine.api.enums.AccountTypeEnum;
+import com.pokemachine.api.enums.EAccount;
 
 /**
  * Account Model
@@ -9,7 +9,7 @@ import com.pokemachine.api.enums.AccountTypeEnum;
 public class MAccount {
 
     /**
-     *  Account ID 
+     * Account ID 
      */
     private int ACC_ID;
 
@@ -24,29 +24,27 @@ public class MAccount {
     private String ACC_PASSWORD;
 
     /**
-     *  Account Status
+     * Account Status
      */
     private Boolean ACC_STATUS;
 
     /**
-     *  Account Balance
+     * Account Balance
      */
     private Float ACC_BALANCE;
     
     /**
      * Account Type
      */
-    private AccountTypeEnum ACC_TYPE; 
+    private EAccountType ACC_TYPE; 
     
     /**
      * Private Constructor
      */
-    private MAccount(){
-
-    }
+    private MAccount(){ }
 
     /**
-     * 
+     * Build Class 
      * @return New Instance of MAccount 
      */
     public static MAccount Build(){
@@ -148,7 +146,7 @@ public class MAccount {
      * @param ACC_TYPE - Account Type
      * @return Instance of Class
      */
-    public MAccount setACC_TYPE(AccountTypeEnum ACC_TYPE){
+    public MAccount setACC_TYPE(EAccountType ACC_TYPE){
         this.ACC_TYPE = ACC_TYPE;
         return this;
     }
@@ -157,8 +155,7 @@ public class MAccount {
      * Get ACC_TYPE
      * @return ACC_TYPE of Account
      */
-    public Int getACC_TYPE(){
+    public EAccountType getACC_TYPE(){
         return ACC_TYPE;
     }
-
 }  

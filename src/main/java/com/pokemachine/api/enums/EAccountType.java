@@ -4,7 +4,7 @@ package com.pokemachine.api.enums;
  * Account Type Enum
  * @author gbrextreme
  */
-public enum AccountTypeEnum {
+public enum EAccountType {
     /**
      * Saving account
      */
