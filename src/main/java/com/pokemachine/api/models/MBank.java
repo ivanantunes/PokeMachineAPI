@@ -87,9 +87,4 @@ public class MBank {
         this.BNK_CODE = BNK_CODE;
         return this;
     }
-    
-
-
-
-
 }
