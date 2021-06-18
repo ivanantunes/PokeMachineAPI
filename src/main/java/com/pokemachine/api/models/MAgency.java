@@ -1,7 +1,7 @@
 package com.pokemachine.api.models;
 
 /**
- * customer Model
+ * Customer Model
  * autor LucasZaia
  */
 
@@ -111,8 +111,4 @@ public class MAgency{
         this.AGE_CODE = AGE_CODE;
         return this;
     }
-
-
-
-
 }
