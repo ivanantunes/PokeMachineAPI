@@ -4,8 +4,7 @@ package com.pokemachine.api.models;
  * Customer Model
  * autor LucasZaia
  */
-
-public class MAgency{
+public class MAgency {
 
     /**
      * Agency ID
@@ -30,13 +29,13 @@ public class MAgency{
     /**
      * Constructor
      */
-    private MAgency(){}
+    private MAgency () {}
 
     /**
      * Build Class
-     * @return New Instance of MAgency
+     * @return Instance of Class
      */
-    public static MAgency build(){
+    public static MAgency build () {
         return MAgency();
     }
 
@@ -44,7 +43,7 @@ public class MAgency{
      * Get AGE_ID  
      * @return AGE_ID of Agency
      */
-    public int getAGE_ID(){
+    public int getAGE_ID () {
         return AGE_ID;
     }
 
@@ -53,7 +52,7 @@ public class MAgency{
      * @param AGE_ID - ID of Agency
      * @return instance of Class
      */
-    public MAgency setAGE_ID(int AGE_ID){
+    public MAgency setAGE_ID (int AGE_ID) {
         this.AGE_ID = AGE_ID;
         return this;
     }
@@ -62,7 +61,7 @@ public class MAgency{
      * Get AGE_BNK_ID
      * @return AGE_BNK_ID of Agency
      */
-    public int getAGE_BNK_ID(){
+    public int getAGE_BNK_ID () {
         return AGE_BNK_ID;
     }
 
@@ -71,7 +70,7 @@ public class MAgency{
      * @param AGE_BNK_ID - ID Bank of Agency
      * @return instance of Class
      */
-    public MAgency setAGE_BNK_ID(int AGE_BNK_ID){
+    public MAgency setAGE_BNK_ID (int AGE_BNK_ID) {
         this.AGE_BNK_ID = AGE_BNK_ID;
         return this;
     }
@@ -80,7 +79,7 @@ public class MAgency{
      * Get AGE_NAME
      * @return AGE_NAME of Agency
      */
-    public String getAGE_NAME(){
+    public String getAGE_NAME () {
         return AGE_NAME;
     }
 
@@ -89,7 +88,7 @@ public class MAgency{
      * @param AGE_NAME - Name of Agency 
      * @return instance of Class
      */
-    public MAgency setAGE_NAME(String AGE_NAME){
+    public MAgency setAGE_NAME (String AGE_NAME) {
         this.AGE_NAME = AGE_NAME;
         return this;
     }
@@ -98,7 +97,7 @@ public class MAgency{
      * Get AGE_CODE
      * @return AGE_CODE of Agency
      */
-    public String getAGE_CODE(){
+    public String getAGE_CODE () {
         return AGE_CODE;
     }
 
@@ -107,7 +106,7 @@ public class MAgency{
      * @param AGE_CODE - CODE of Agency
      * @return instance of Class
      */
-    public MAgency setAGE_CODE(String AGE_CODE){
+    public MAgency setAGE_CODE (String AGE_CODE) {
         this.AGE_CODE = AGE_CODE;
         return this;
     }

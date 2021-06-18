@@ -1,11 +1,10 @@
 package com.pokemachine.api.models;
 
-
 /**
  * Customer Model
  * author LucasZaia
  */
-public class MBank{
+public class MBank {
 
     /**
      * Bank ID
@@ -25,13 +24,13 @@ public class MBank{
     /**
      * Constructor
      */
-    private MBank(){}
+    private MBank () {}
 
     /**
      * Build Class
-     * @return New instance of MBank
+     * @return instance of Class
      */
-    public static MBank build(){
+    public static MBank build () {
         return MBank();
     }
     
@@ -39,7 +38,7 @@ public class MBank{
      * Get BNK_ID
      * @return BNK_ID of Bank
      */
-    public int getBNK_ID(){
+    public int getBNK_ID () {
         return BNK_ID;
     }
 
@@ -48,7 +47,7 @@ public class MBank{
      * @param BNK_ID - ID of Bank
      * @return instance of Class
      */
-    public MBank setBNK_ID(int BNK_ID){
+    public MBank setBNK_ID (int BNK_ID) {
         this.BNK_ID = BNK_ID;
         return this;
     }
@@ -57,7 +56,7 @@ public class MBank{
      * Get BNK_NAME
      * @return BNK_NAME of Bank
      */
-    public String getBNK_NAME(){
+    public String getBNK_NAME () {
         return BNK_NAME;
     }
 
@@ -66,7 +65,7 @@ public class MBank{
      * @param BNK_NAME - Bank Name
      * @return instance of Class
      */
-    public MBank setBNK_NAME(String BNK_NAME){
+    public MBank setBNK_NAME (String BNK_NAME) {
         this.BNK_NAME = BNK_NAME;
         return this;
     }
@@ -75,7 +74,7 @@ public class MBank{
      * Get BNK_CODE
      * @return BNK_CODE of Bank
      */
-    public String getBNK_CODE(){
+    public String getBNK_CODE () {
         return BNK_CODE;
     }
 
@@ -84,7 +83,7 @@ public class MBank{
      * @param BNK_CODE - Bank Code 
      * @return instance of Class
      */
-    public MBank setBNK_CODE(String BNK_CODE){
+    public MBank setBNK_CODE (String BNK_CODE) {
         this.BNK_CODE = BNK_CODE;
         return this;
     }
