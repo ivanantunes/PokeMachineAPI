@@ -38,7 +38,7 @@ public class MHistoric {
     /**
      * Historic Value
      */
-    private Float HIS_VALUE = 0;
+    private float HIS_VALUE = 0;
 
     /**
      * Constructor
@@ -147,14 +147,14 @@ public class MHistoric {
      * Get HIS_VALUE 
      * @return HIS_VALUE of Historic
      */
-    public Float getHIS_VALUE () {
+    public float getHIS_VALUE () {
         return HIS_VALUE;
     }
 
     /**
      * Set HIS_VALUE
      * @param HIS_VALUE - Value of Historic
-     * @return
+     * @return Instance of Class
      */
     public MHistoric setHIS_VALUE (Float HIS_VALUE) {
         this.HIS_VALUE = HIS_VALUE;

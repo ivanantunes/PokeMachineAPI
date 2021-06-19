@@ -80,7 +80,7 @@ public class MCashMachine {
     /**
      * Set CSM_AVAILABLE_VALUE
      * @param CSM_AVAILABLE_VALUE - Available Value of Cash Machine
-     * @return
+     * @return Instance of Class
      */
     public MCashMachine setCSM_AVAILABLE_VALUE (Float CSM_AVAILABLE_VALUE) {
         this.CSM_AVAILABLE_VALUE = CSM_AVAILABLE_VALUE;
