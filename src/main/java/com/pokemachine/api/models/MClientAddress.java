@@ -153,7 +153,7 @@ public class MClientAddress {
      * Get CLA_NUMBER
      * @return Number of Address
      */
-    public int getCLA_NUMBER(){
+    public int getCLA_NUMBER() {
         return CLA_NUMBER;
     }
 
@@ -162,7 +162,7 @@ public class MClientAddress {
      * @param CLA_NUMBER - Number of Client Address
      * @return Instance of Class
      */
-    public MClientAddress setCLA_NUMBER(int CLA_NUMBER){
+    public MClientAddress setCLA_NUMBER(int CLA_NUMBER) {
         this.CLA_NUMBER = CLA_NUMBER;
         return this;
     }
