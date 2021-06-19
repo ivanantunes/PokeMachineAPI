@@ -33,7 +33,7 @@ public class MHistoric {
     /**
      * Historic Datetime
      */
-    private Date HIS_DATETIME = 0;
+    private Date HIS_DATETIME;
 
     /**
      * Historic Value
@@ -50,7 +50,7 @@ public class MHistoric {
      * @return Instance of Class
      */
     public static MHistoric build () {
-        return MHistoric();
+        return new MHistoric();
     }
 
     /**
@@ -156,7 +156,7 @@ public class MHistoric {
      * @param HIS_VALUE - Value of Historic
      * @return Instance of Class
      */
-    public MHistoric setHIS_VALUE (Float HIS_VALUE) {
+    public MHistoric setHIS_VALUE (float HIS_VALUE) {
         this.HIS_VALUE = HIS_VALUE;
         return this;
     }

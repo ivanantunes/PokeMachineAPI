@@ -26,6 +26,14 @@ public enum EHistoricOperation {
     private String description;
 
     /**
+     * Constructor
+     * @param description
+     */
+    private EHistoricOperation(String description) {
+        this.description = description;
+    }
+
+    /**
      * Get description
     */
     public String getDescription () {

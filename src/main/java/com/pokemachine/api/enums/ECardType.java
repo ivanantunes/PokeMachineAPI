@@ -25,6 +25,14 @@ public enum ECardType {
     private String description;
 
     /**
+     * Constructor
+     * @param description
+     */
+    private ECardType (String description) {
+        this.description = description;
+    }
+
+    /**
      *  Get Description 
      * @return Description
      */

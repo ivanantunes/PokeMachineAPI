@@ -1,6 +1,6 @@
 package com.pokemachine.api.models;
 
-import com.pokemachine.api.enums.EAccount;
+import com.pokemachine.api.enums.EAccountType;
 
 /**
  * Account Model
@@ -11,27 +11,27 @@ public class MAccount {
     /**
      * Account ID 
      */
-    private int ACC_ID;
+    private int ACC_ID = 0;
 
     /**
      * Account Code
      */
-    private String ACC_CODE;
+    private String ACC_CODE = "";
 
     /**
      * Account Password
      */
-    private String ACC_PASSWORD;
+    private String ACC_PASSWORD = "";
 
     /**
      * Account Status
      */
-    private Boolean ACC_STATUS;
+    private boolean ACC_STATUS = false;
 
     /**
      * Account Balance
      */
-    private Float ACC_BALANCE;
+    private float ACC_BALANCE = 0;
     
     /**
      * Account Type
@@ -56,7 +56,7 @@ public class MAccount {
      * @param ACC_ID - Account ID
      * @return Instance of Class
      */
-    public MAccount setACC_ID(Int ACC_ID) {
+    public MAccount setACC_ID(int ACC_ID) {
         this.ACC_ID = ACC_ID;
         return this;
     }
@@ -65,7 +65,7 @@ public class MAccount {
      * Get ACC_ID
      * @return ACC_ID of Account
      */
-    public Int getACC_ID() {
+    public int getACC_ID() {
         return ACC_ID;
     }
 
@@ -83,7 +83,7 @@ public class MAccount {
      * Get ACC_CODE
      * @return ACC_CODE of Account
      */
-    public Int getACC_CODE() {
+    public String getACC_CODE() {
         return ACC_CODE;
     }
 
@@ -101,7 +101,7 @@ public class MAccount {
      * Get ACC_PASSWORD
      * @return ACC_PASSWORD of Account
      */
-    public Int getACC_PASSWORD() {
+    public String getACC_PASSWORD() {
         return ACC_PASSWORD;
     }
 
@@ -110,7 +110,7 @@ public class MAccount {
      * @param ACC_STATUS - Account Status
      * @return Instance of Class
      */
-    public MAccount setACC_STATUS(Boolean ACC_STATUS) {
+    public MAccount setACC_STATUS(boolean ACC_STATUS) {
         this.ACC_STATUS = ACC_STATUS;
         return this;
     }
@@ -119,7 +119,7 @@ public class MAccount {
      * Get ACC_STATUS
      * @return ACC_STATUS of Account
      */
-    public Int getACC_STATUS() {
+    public boolean getACC_STATUS() {
         return ACC_STATUS;
     }
 
@@ -128,7 +128,7 @@ public class MAccount {
      * @param ACC_BALANCE - Account Balance
      * @return Instance of Classs
      */
-    public MAccount setACC_BALANCE(Float ACC_BALANCE) {
+    public MAccount setACC_BALANCE(float ACC_BALANCE) {
         this.ACC_BALANCE = ACC_BALANCE;
         return this;
     }
@@ -137,7 +137,7 @@ public class MAccount {
      * Get ACC_BALANCE
      * @return ACC_BALANCE of Account
      */
-    public Int getACC_BALANCE() {
+    public float getACC_BALANCE() {
         return ACC_BALANCE;
     }
 
