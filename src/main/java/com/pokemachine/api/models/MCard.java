@@ -36,7 +36,7 @@ public class MCard {
     /**
      * Card Status
      */
-    private Boolean CAR_STATUS;
+    private boolean CAR_STATUS;
 
     /**
      * Card Password
@@ -159,7 +159,7 @@ public class MCard {
      * @param CAR_STATUS - Status of Card
      * @return instance of Class
      */
-    public MCard setCAR_STATUS (Boolean CAR_STATUS) {
+    public MCard setCAR_STATUS (boolean CAR_STATUS) {
         this.CAR_STATUS = CAR_STATUS;
         return this;
     }
