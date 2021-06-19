@@ -1,5 +1,7 @@
 package com.pokemachine.api.models;
 
+import java.util.Date;
+
 import com.pokemachine.api.enums.ECardType;
 
 /**
@@ -11,12 +13,12 @@ public class MCard {
     /**
      * Card ID 
      */
-    private int CAR_ID;
+    private int CAR_ID = 0;
 
     /**
      * Card Code
      */
-    private int CAR_CODE;
+    private int CAR_CODE = 0;
 
     /**
      * Card Expiration Date
@@ -31,17 +33,17 @@ public class MCard {
     /**
      * Card CVV
      */
-    private int CAR_CVV;
+    private int CAR_CVV = 0;
 
     /**
      * Card Status
      */
-    private boolean CAR_STATUS;
+    private boolean CAR_STATUS = false;
 
     /**
      * Card Password
      */
-    private String CAR_PASSWORD;
+    private String CAR_PASSWORD = "";
 
     /**
      * Constructor
@@ -87,8 +89,8 @@ public class MCard {
      * @param CAR_CODE - Code of Card
      * @return instance of Class
      */
-    public MCard setCAR_CODE (int CAR_COTE) {
-        this.CAR_COTE = CAR_COTE;
+    public MCard setCAR_CODE (int CAR_CODE) {
+        this.CAR_CODE = CAR_CODE;
         return this;
     }
 
@@ -96,7 +98,7 @@ public class MCard {
      * Get CAR_EXPIRATION_DATE
      * @return CAR_EXPIRATION_DATE of Card
      */
-    public int getCAR_EXPIRATION_DATE () {
+    public Date getCAR_EXPIRATION_DATE () {
         return CAR_EXPIRATION_DATE;
     }
 
@@ -114,7 +116,7 @@ public class MCard {
      * Get CAR_TYPE
      * @return CAR_TYPE of Card
      */
-    public int getCAR_TYPE () {
+    public ECardType getCAR_TYPE () {
         return CAR_TYPE;
     }
 
@@ -150,7 +152,7 @@ public class MCard {
      * Get CAR_STATUS
      * @return CAR_STATUS of Card
      */
-    public int getCAR_STATUS () {
+    public boolean getCAR_STATUS () {
         return CAR_STATUS;
     }
 
@@ -168,7 +170,7 @@ public class MCard {
      * Get CAR_PASSWORD
      * @return CAR_PASSWORD of Card
      */
-    public int getCAR_PASSWORD () {
+    public String getCAR_PASSWORD () {
         return CAR_PASSWORD;
     }
 

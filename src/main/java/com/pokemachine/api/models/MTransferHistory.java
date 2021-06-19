@@ -1,5 +1,7 @@
 package com.pokemachine.api.models;
 
+import java.util.Date;
+
 /**
  * Card Model
  * @author gbrextreme 
@@ -9,17 +11,17 @@ public class MTransferHistory {
     /**
      * Transfer History ID
      */
-    private int TRH_ID;
+    private int TRH_ID = 0;
 
     /**
      * Transfer History Value
      */
-    private Float TRH_VALUE;
+    private float TRH_VALUE = 0;
 
     /**
      * Transfer History Date Time
      */
-    private DateTime TRH_DATETIME;
+    private Date TRH_DATETIME;
 
     /**
      * Constructor
@@ -35,14 +37,6 @@ public class MTransferHistory {
     }
 
     /**
-     * Get TRH_ID
-     * @return TRH_ID of Transfer History
-     */
-    public int getTRH_ID () {
-        return TRH_ID;
-    }
-
-    /**
      * Set TRH_ID
      * @param TRH_ID - ID of Transfer History
      * @return instance of Class
@@ -53,21 +47,48 @@ public class MTransferHistory {
     }
 
     /**
-     * Get TRH_DATETIME
-     * @return TRH_DATETIME of Transfer History
+     * Get TRH_ID
+     * @return TRH_ID of Transfer History
      */
-    public int getTRH_DATETIME () {
-        return TRH_DATETIME;
+    public int getTRH_ID () {
+        return TRH_ID;
     }
+
+    /**
+     * Set TRH_VALUE
+     * @param TRH_VALUE - Value of Transfer History
+     * @return Instance of Class
+     */
+    public MTransferHistory setTRH_VALUE (float TRH_VALUE) {
+        this.TRH_VALUE = TRH_VALUE;
+        return this;
+    }
+
+    /**
+     * Get TRH_VALUE
+     * @return THR_VALUE of Transfer History
+     */
+    public float getTRH_VALUE () {
+        return TRH_VALUE;
+    }
+
 
     /**
      * Set TRH_DATETIME
      * @param TRH_DATETIME - Date Time of Transfer History
      * @return instance of Class
      */
-    public MTransferHistory setTRH_DATETIME (DateTime TRH_DATETIME) {
+    public MTransferHistory setTRH_DATETIME (Date TRH_DATETIME) {
         this.TRH_DATETIME = TRH_DATETIME;
         return this;
+    }
+
+    /**
+     * Get TRH_DATETIME
+     * @return TRH_DATETIME of Transfer History
+     */
+    public Date getTRH_DATETIME () {
+        return TRH_DATETIME;
     }
 
 }

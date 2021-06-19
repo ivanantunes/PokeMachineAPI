@@ -21,6 +21,14 @@ public enum EAccountType {
     private String description;
 
     /**
+     * Constructor
+     * @param description
+     */
+    private EAccountType (String description) {
+        this.description = description;
+    }
+
+    /**
      *  Get Description 
      * @return Description
      */

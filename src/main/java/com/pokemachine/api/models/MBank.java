@@ -31,7 +31,7 @@ public class MBank {
      * @return instance of Class
      */
     public static MBank build () {
-        return MBank();
+        return new MBank();
     }
     
     /**

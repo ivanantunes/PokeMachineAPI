@@ -30,7 +30,7 @@ public class MCashMachine {
      * @return Instance of Class
      */
     public static MCashMachine build () {
-        return MCashMachine();
+        return new MCashMachine();
     }
 
     /**
