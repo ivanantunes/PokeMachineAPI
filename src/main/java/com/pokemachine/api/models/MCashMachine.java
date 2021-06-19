@@ -18,7 +18,7 @@ public class MCashMachine {
     /**
      * Cash Machine Available Value
      */
-    private Float CSM_AVAILABLE_VALUE = 0;
+    private float CSM_AVAILABLE_VALUE = 0;
 
     /**
      * Constructor
@@ -73,7 +73,7 @@ public class MCashMachine {
      * Get CSM_AVAILABLE_VALUE
      * @return CSM_AVAILABLE_VALUE of Cash Machine 
      */
-    public Float getCSM_AVAILABLE_VALUE () {
+    public float getCSM_AVAILABLE_VALUE () {
         return CSM_AVAILABLE_VALUE;
     }
 
