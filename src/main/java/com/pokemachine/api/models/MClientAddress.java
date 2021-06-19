@@ -22,7 +22,7 @@ public class MClientAddress {
     private String CLA_ZIP_CODE = "";
 
     /**
-     * Client Address
+     * Client Address Number
      */
     private String CLA_ADDRESS = "";
 
@@ -151,7 +151,7 @@ public class MClientAddress {
 
     /**
      * Get CLA_NUMBER
-     * @return Number
+     * @return Number of Address
      */
     public int getCLA_NUMBER(){
         return CLA_NUMBER;
@@ -159,7 +159,7 @@ public class MClientAddress {
 
     /**
      * Set CLA_NUMBER
-     * @param CLA_NUMBER - NUMBER of Client Number
+     * @param CLA_NUMBER - Number of Client Address
      * @return Instance of Class
      */
     public MClientAddress setCLA_NUMBER(int CLA_NUMBER){
