@@ -22,9 +22,14 @@ public class MClientAddress {
     private String CLA_ZIP_CODE = "";
 
     /**
-     * Client Address
+     * Client Address Number
      */
     private String CLA_ADDRESS = "";
+
+    /**
+     * Client Number
+     */
+    private int CLA_NUMBER = 0;
 
     /**
      * Client Address Districty
@@ -141,6 +146,24 @@ public class MClientAddress {
      */
     public MClientAddress setCLA_ADDRESS(String CLA_ADDRESS) {
         this.CLA_ADDRESS = CLA_ADDRESS;
+        return this;
+    }
+
+    /**
+     * Get CLA_NUMBER
+     * @return Number of Address
+     */
+    public int getCLA_NUMBER() {
+        return CLA_NUMBER;
+    }
+
+    /**
+     * Set CLA_NUMBER
+     * @param CLA_NUMBER - Number of Client Address
+     * @return Instance of Class
+     */
+    public MClientAddress setCLA_NUMBER(int CLA_NUMBER) {
+        this.CLA_NUMBER = CLA_NUMBER;
         return this;
     }
 
