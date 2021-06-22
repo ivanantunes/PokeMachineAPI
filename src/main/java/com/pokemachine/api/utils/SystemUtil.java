@@ -72,9 +72,10 @@ public class SystemUtil {
 	/**
 	 * Take Part Of Date
 	 * @param part - Part Date
+	 * @param sum - number to add
 	 * @return String of Part Date
 	 */
-	public static String takePartOfDate(EPartDate part) {
+	public static String takePartOfDate(EPartDate part, int sum) {
 
 		LocalDate today = LocalDate.now();
 
@@ -93,7 +94,7 @@ public class SystemUtil {
 				break;
 		}
 
-		result = value + "";
+		result = (value + sum) + "";
 
 		if (value < 10) {
 			result = "0" + value;
