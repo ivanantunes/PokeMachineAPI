@@ -1,9 +1,12 @@
 package com.pokemachine.api.utils;
 
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
+
+import com.pokemachine.api.enums.EPartDate;
 
 /**
  * Class Contains useful functions for the system.
@@ -64,5 +67,42 @@ public class SystemUtil {
 		}
 
 		return resultRandom;
+	}
+
+	/**
+	 * Take Part Of Date
+	 * @param part - Part Date
+	 * @return String of Part Date
+	 */
+	public static String takePartOfDate(EPartDate part) {
+
+		LocalDate today = LocalDate.now();
+
+		int value = 0;
+		String result = "";
+
+		switch (part) {
+			case DAY:
+				value = today.getDayOfMonth();
+				break;
+			case MONTH:
+				value = today.getMonthValue();
+				break;
+			case YEAR:
+				value = today.getYear();
+				break;
+		}
+
+		result = value + "";
+
+		if (value < 10) {
+			result = "0" + value;
+		}
+
+		if (result.length() > 2) {
+			result = result.substring(result.length() - (result.length() - 2));
+		}
+
+		return result;
 	}
 }
