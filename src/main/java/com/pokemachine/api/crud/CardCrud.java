@@ -231,14 +231,14 @@ public class CardCrud implements DBCrud<MCard> {
             .setCAR_PASSWORD(value.getCAR_PASSWORD());
         
 
-            // data.setCAR_CODE("");
-            // data.setCAR_CVV(000);
-            // data.setCAR_EXPIRATION_DATE("");
-            // data.setCAR_STATUS(true);
+            data.setCAR_CODE(SystemUtil);
+            data.setCAR_CVV(000);
+            data.setCAR_EXPIRATION_DATE("");
+            data.setCAR_STATUS(true);
             
-            // if (data.getCAR_TYPE().contains("C") || data.getCAR_TYPE().contains("DC")) {
-            //     data.setCAR_LIMIT(800);
-            // }
+            if (data.getCAR_TYPE().contains("C") || data.getCAR_TYPE().contains("DC")) {
+                data.setCAR_LIMIT(800);
+            }
 
 
         try {
