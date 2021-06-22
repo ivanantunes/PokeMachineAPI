@@ -1,7 +1,9 @@
 package com.pokemachine.api.utils;
 
+import java.math.BigInteger;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Random;
 
 /**
  * Class Contains useful functions for the system.
@@ -35,5 +37,32 @@ public class SystemUtil {
 		System.out.println(base + msg);
 		
 		return base + msg;
+	}
+
+	/**
+	 * Generate random numbers for code creation.
+	 * @param min - Min Value
+	 * @param max - Max Value
+	 * @return String of Random
+	 */
+	public static BigInteger randomNumber(BigInteger min, BigInteger max) { 
+
+		Random random = new Random();
+
+		BigInteger bigInteger = max.subtract(min);
+		
+		int length = max.bitLength();
+
+		BigInteger resultRandom = new BigInteger(length, random);
+
+		if (resultRandom.compareTo(min) < 0) {
+			resultRandom.add(min);
+		}
+
+		if (resultRandom.compareTo(max) >= 0) {
+			resultRandom = resultRandom.mod(bigInteger).add(min);
+		}
+
+		return resultRandom;
 	}
 }
