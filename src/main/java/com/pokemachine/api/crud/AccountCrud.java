@@ -4,8 +4,6 @@ import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.database.DBService;
 import com.pokemachine.api.interfaces.DBCrud;
