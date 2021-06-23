@@ -12,6 +12,7 @@ import com.pokemachine.api.utils.SystemUtil;
 
 /**
  * Customer Crud
+ * 
  * @author ivanantunes
  */
 public class ClientCrud implements DBCrud<MClient> {
@@ -25,14 +26,16 @@ public class ClientCrud implements DBCrud<MClient> {
      * Instance of Class
      */
     private static ClientCrud instance;
-    
+
     /**
      * Constructor
      */
-    private ClientCrud() { }
+    private ClientCrud() {
+    }
 
     /**
      * Get Instance
+     * 
      * @return Instance of Class
      */
     public static ClientCrud getInstance() {
@@ -73,7 +76,7 @@ public class ClientCrud implements DBCrud<MClient> {
             if (result.next()) {
                 id = result.getInt(1);
             }
-            
+
             return id;
 
         } catch (Exception e) {
@@ -86,7 +89,7 @@ public class ClientCrud implements DBCrud<MClient> {
         String sql = "UPDATE CLIENT SET CLI_FULL_NAME = ?, CLI_RG = ?, CLI_CPF = ?, CLI_BIRTHDAY = ? WHERE CLI_ID = ?";
 
         try {
-            
+
             PreparedStatement stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, value.getCLI_FULL_NAME());
             stmt.setString(2, value.getCLI_RG());
@@ -120,12 +123,9 @@ public class ClientCrud implements DBCrud<MClient> {
         String sql = "SELECT * FROM CLIENT";
 
         if (search != null) {
-            sql = "SELECT * FROM CLIENT WHERE " +
-            "CLI_FULL_NAME LIKE '%"+ search +"%' OR " +
-            "CLI_RG LIKE '%" + search + "%' OR " +
-            "CLI_CPF LIKE '%" + search + "%' OR " +
-            "CLI_BIRTHDAY LIKE '%" + search + "%' OR " +
-            "CLI_ID = '" + search + "'";
+            sql = "SELECT * FROM CLIENT WHERE " + "CLI_FULL_NAME LIKE '%" + search + "%' OR " + "CLI_RG LIKE '%"
+                    + search + "%' OR " + "CLI_CPF LIKE '%" + search + "%' OR " + "CLI_BIRTHDAY LIKE '%" + search
+                    + "%' OR " + "CLI_ID = '" + search + "'";
         }
 
         try {
@@ -135,13 +135,10 @@ public class ClientCrud implements DBCrud<MClient> {
 
             List<MClient> lClient = new ArrayList<MClient>();
 
-            while(result.next()) {
-                MClient client = MClient.build()
-                .setCLI_ID(result.getInt(1))
-                .setCLI_FULL_NAME(result.getString(2))
-                .setCLI_RG(result.getString(3))
-                .setCLI_CPF(result.getString(4))
-                .setCLI_BIRTHDAY(result.getString(5));
+            while (result.next()) {
+                MClient client = MClient.build().setCLI_ID(result.getInt(1)).setCLI_FULL_NAME(result.getString(2))
+                        .setCLI_RG(result.getString(3)).setCLI_CPF(result.getString(4))
+                        .setCLI_BIRTHDAY(result.getString(5));
 
                 lClient.add(client);
             }
@@ -165,19 +162,16 @@ public class ClientCrud implements DBCrud<MClient> {
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
-            
+
             ResultSet result = stmt.executeQuery(sql);
 
             List<MClient> lClient = new ArrayList<MClient>();
 
-            while(result.next()) {
-                MClient client = MClient.build()
-                .setCLI_ID(result.getInt(1))
-                .setCLI_FULL_NAME(result.getString(2))
-                .setCLI_RG(result.getString(3))
-                .setCLI_CPF(result.getString(4))
-                .setCLI_BIRTHDAY(result.getString(5));
-                
+            while (result.next()) {
+                MClient client = MClient.build().setCLI_ID(result.getInt(1)).setCLI_FULL_NAME(result.getString(2))
+                        .setCLI_RG(result.getString(3)).setCLI_CPF(result.getString(4))
+                        .setCLI_BIRTHDAY(result.getString(5));
+
                 lClient.add(client);
             }
 
