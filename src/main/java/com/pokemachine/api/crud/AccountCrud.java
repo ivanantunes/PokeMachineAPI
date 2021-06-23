@@ -13,7 +13,7 @@ import com.pokemachine.api.utils.SystemUtil;
 /**
  * Customer Crud
  * 
- * @author ivanantunes
+ * @author LucasZaia
  */
 public class AccountCrud implements DBCrud<MAccount> {
 
