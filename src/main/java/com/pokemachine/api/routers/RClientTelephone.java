@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class RClientTelephone implements RouterCrud<MClientTelephone> {
-    
+
     /**
      * Crud Client Telephone
      */
@@ -35,7 +35,7 @@ public class RClientTelephone implements RouterCrud<MClientTelephone> {
         String validator = "";
 
         validator = StringValidator.isValidSting(data.getCLT_TELEPHONE(), "Telefone", 20, 0);
-        
+
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
@@ -53,7 +53,7 @@ public class RClientTelephone implements RouterCrud<MClientTelephone> {
                 message.setCode(code).setMessage("Cliente Não Encontrado.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
-            
+
             crud.insert(data);
             code = HttpResponse.OK;
             message.setCode(code).setMessage("Telefone Cadastrado com Sucesso.");
@@ -74,7 +74,7 @@ public class RClientTelephone implements RouterCrud<MClientTelephone> {
         String validator = "";
 
         validator = StringValidator.isValidSting(data.getCLT_TELEPHONE(), "Telefone", 20, 0);
-        
+
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
@@ -91,7 +91,7 @@ public class RClientTelephone implements RouterCrud<MClientTelephone> {
         }
 
         try {
-            
+
             List<MClientTelephone> lTel = crud.getDataByID(data.getCLT_ID());
 
             if (lTel.size() != 1 || lTel.size() == 1 && lTel.get(0).getCLT_ID() != data.getCLT_ID()) {
@@ -132,7 +132,7 @@ public class RClientTelephone implements RouterCrud<MClientTelephone> {
         }
 
         try {
-            
+
             List<MClientTelephone> lTel = crud.getDataByID(id);
 
             if (lTel.size() == 0 || lTel.size() > 1 || lTel.size() == 1 && lTel.get(0).getCLT_ID() != id) {
@@ -143,7 +143,6 @@ public class RClientTelephone implements RouterCrud<MClientTelephone> {
             crud.delete(id);
             code = HttpResponse.OK;
             message.setCode(code).setMessage("Telefone Deletado com Sucesso.");
-
         } catch (Exception e) {
             code = HttpResponse.BAD_REQUEST;
             message.setCode(code).setMessage("Falha ao Deletar Telefone.").setError(e.getMessage());

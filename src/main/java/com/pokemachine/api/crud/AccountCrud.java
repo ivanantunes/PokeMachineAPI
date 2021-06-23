@@ -1,5 +1,6 @@
 package com.pokemachine.api.crud;
 
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -60,38 +61,41 @@ public class AccountCrud implements DBCrud<MAccount> {
 
         String sql = "INSERT INTO ACCOUNT (ACC_AGE_ID,ACC_CODE,ACC_PASSWORD,"
                 + "ACC_STATUS,ACC_BALANCE,ACC_TYPE) VALUES (?,?,?,?,?,?,?)";
+
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setInt(1, value.getACC_AGE_ID());
-            stmt.setInt(2, value.getACC_CLI_ID());
+            BigInteger min = new BigInteger("100000000000000");
+            BigInteger max = new BigInteger("999999999999999");
+            value.setACC_CODE(String.valueOf(SystemUtil.randomNumber(min, max)));
 
-            // TODO gerar random numero da conta
+            try {
+                PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-            stmt.setString(3, value.getACC_CODE());
-            stmt.setString(4, value.getACC_PASSWORD());
-            stmt.setBoolean(5, true);
-            stmt.setFloat(6, value.getACC_BALANCE());
-            stmt.setString(7, value.getACC_TYPE());
-            stmt.executeUpdate();
+                stmt.setInt(1, value.getACC_AGE_ID());
+                stmt.setInt(2, value.getACC_CLI_ID());
+                stmt.setString(3, value.getACC_CODE());
+                stmt.setString(4, value.getACC_PASSWORD());
+                stmt.setBoolean(5, true);
+                stmt.setFloat(6, value.getACC_BALANCE());
+                stmt.setString(7, value.getACC_TYPE());
+                stmt.executeUpdate();
 
-            ResultSet result = stmt.getGeneratedKeys();
+                ResultSet result = stmt.getGeneratedKeys();
 
-            int id = 0;
+                int id = 0;
 
-            if (result.next()) {
-                id = result.getInt(1);
+                if (result.next()) {
+                    id = result.getInt(1);
+                }
+
+                return id;
+
+            } catch (Exception e) {
+                throw new Error(SystemUtil.log("Falha ao Cadastrar Conta" + e.getMessage()));
             }
-
-            return id;
-
         } catch (Exception e) {
-            throw new Error(SystemUtil.log("Falha ao Cadastrar Conta" + e.getMessage()));
+            throw new Error(SystemUtil.log("Falha ao gerar Conta" + e.getMessage()));
         }
-    }
-
-    private Random Random() {
-        return null;
     }
 
     @Override
