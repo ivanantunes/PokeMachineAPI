@@ -1,11 +1,13 @@
 package com.pokemachine.api.crud;
 
+import java.math.BigInteger;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.database.DBService;
+import com.pokemachine.api.enums.EPartDate;
 import com.pokemachine.api.interfaces.DBCrud;
 import com.pokemachine.api.models.MCard;
 import com.pokemachine.api.utils.SystemUtil;
@@ -42,7 +44,6 @@ public class CardCrud implements DBCrud<MCard> {
         }
 
         return CardCrud.instance;
-
     }
 
     /**
@@ -51,7 +52,6 @@ public class CardCrud implements DBCrud<MCard> {
     public static void destroyInstance() {
         CardCrud.instance = null;
     }
-    
     
     @Override
     public int insert(MCard value) {
@@ -64,7 +64,7 @@ public class CardCrud implements DBCrud<MCard> {
             stmt.setString(2, value.getCAR_CODE());
             stmt.setString(3, value.getCAR_EXPIRATION_DATE());
             stmt.setString(4, value.getCAR_TYPE());
-            stmt.setInt(5, value.getCAR_CVV());
+            stmt.setString(5, value.getCAR_CVV());
             stmt.setBoolean(6, value.getCAR_STATUS());
             stmt.setString(7, value.getCAR_PASSWORD());
             stmt.setFloat(8, value.getCAR_LIMIT());
@@ -95,7 +95,7 @@ public class CardCrud implements DBCrud<MCard> {
             stmt.setString(2, value.getCAR_CODE());
             stmt.setString(3, value.getCAR_EXPIRATION_DATE());
             stmt.setString(4, value.getCAR_TYPE());
-            stmt.setInt(5, value.getCAR_CVV());
+            stmt.setString(5, value.getCAR_CVV());
             stmt.setBoolean(6, value.getCAR_STATUS());
             stmt.setString(7, value.getCAR_PASSWORD());
             stmt.setFloat(8, value.getCAR_LIMIT());
@@ -173,7 +173,7 @@ public class CardCrud implements DBCrud<MCard> {
                     .setCAR_CODE(result.getString(3))
                     .setCAR_EXPIRATION_DATE(result.getString(4))
                     .setCAR_TYPE(result.getString(5))
-                    .setCAR_CVV(result.getInt(6))
+                    .setCAR_CVV(result.getString(6))
                     .setCAR_STATUS(result.getBoolean(7))
                     .setCAR_PASSWORD(result.getString(8))
                     .setCAR_LIMIT(result.getFloat(9));
@@ -208,7 +208,7 @@ public class CardCrud implements DBCrud<MCard> {
                     .setCAR_CODE(result.getString(3))
                     .setCAR_EXPIRATION_DATE(result.getString(4))
                     .setCAR_TYPE(result.getString(5))
-                    .setCAR_CVV(result.getInt(6))
+                    .setCAR_CVV(result.getString(6))
                     .setCAR_STATUS(result.getBoolean(7))
                     .setCAR_PASSWORD(result.getString(8))
                     .setCAR_LIMIT(result.getFloat(9));
@@ -221,50 +221,61 @@ public class CardCrud implements DBCrud<MCard> {
         }
     }
 
-    public int AskCard(MCard value, int limit) {
+    public int AskCard(MCard value) {
         String sql = "INSERT INTO CARD (CAR_CODE, CAR_EXPIRATION_DATE, CAR_TYPE, " +
                      "CAR_CVV, CAR_STATUS, CAR_PASSWORD) VALUES(?,?,?,?,?,?)";
 
         MCard data = MCard.Build()
             .setCAR_ACC_ID(value.getCAR_ACC_ID())
             .setCAR_TYPE(value.getCAR_TYPE())
-            .setCAR_PASSWORD(value.getCAR_PASSWORD());
-        
-
-            data.setCAR_CODE(SystemUtil);
-            data.setCAR_CVV(000);
-            data.setCAR_EXPIRATION_DATE("");
-            data.setCAR_STATUS(true);
-            
-            if (data.getCAR_TYPE().contains("C") || data.getCAR_TYPE().contains("DC")) {
-                data.setCAR_LIMIT(800);
-            }
-
+            .setCAR_PASSWORD(value.getCAR_PASSWORD())
+            .setCAR_LIMIT(value.getCAR_LIMIT());
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            stmt.setInt(1, data.getCAR_ACC_ID());
-            stmt.setString(2, data.getCAR_CODE());
-            stmt.setString(3, data.getCAR_EXPIRATION_DATE());
-            stmt.setString(4, data.getCAR_TYPE());
-            stmt.setInt(5, data.getCAR_CVV());
-            stmt.setBoolean(6, data.getCAR_STATUS());
-            stmt.setString(7, data.getCAR_PASSWORD());
-            stmt.setFloat(8, data.getCAR_LIMIT());
-            stmt.executeUpdate();   
 
-            ResultSet result = stmt.getGeneratedKeys();
+            BigInteger minCode = new BigInteger("100000000000000");
+            BigInteger maxCode = new BigInteger("99999999999999999999");
+            data.setCAR_CODE(String.valueOf(SystemUtil.randomNumber(minCode, maxCode)));
             
-            int id = 0;
-            if (result.next()) {
-                id = result.getInt(1);
+            BigInteger minCvv = new BigInteger("100");
+            BigInteger maxCvv = new BigInteger("999");
+            String CAR_CVV = String.valueOf(SystemUtil.randomNumber(minCvv, maxCvv));
+            data.setCAR_CVV(CAR_CVV);
+            
+            data.setCAR_EXPIRATION_DATE(
+                SystemUtil.takePartOfDate(EPartDate.MONTH, 0)+"/"+ 
+                SystemUtil.takePartOfDate(EPartDate.YEAR, 8));
+
+            data.setCAR_STATUS(true);
+
+            try {
+                PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stmt.setInt(1, data.getCAR_ACC_ID());
+                stmt.setString(2, data.getCAR_CODE());
+                stmt.setString(3, data.getCAR_EXPIRATION_DATE());
+                stmt.setString(4, data.getCAR_TYPE());
+                stmt.setString(5, data.getCAR_CVV());
+                stmt.setBoolean(6, data.getCAR_STATUS());
+                stmt.setString(7, data.getCAR_PASSWORD());
+                stmt.setFloat(8, data.getCAR_LIMIT());
+                stmt.executeUpdate();   
+    
+                ResultSet result = stmt.getGeneratedKeys();
+                
+                int id = 0;
+                if (result.next()) {
+                    id = result.getInt(1);
+                }
+
+                return id;
+            } catch (Exception  err) {
+                throw new Error(SystemUtil.log("Falha ao Cadastrar Cartao - " + err.getMessage()));
             }
 
-            return id;
-
-        } catch (Exception  err) {
-            throw new Error(SystemUtil.log("Falha ao Cadastrar Cartao - " + err.getMessage()));
+        } catch (Exception err) {
+            throw new Error(SystemUtil.log("Falha ao Gerar Dados para Cartao - " + err.getMessage()));    
         }
+            
     } 
 
 }

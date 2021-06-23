@@ -34,7 +34,7 @@ public class MCard {
     /**
      * Card CVV
      */
-    private int CAR_CVV = 0;
+    private String CAR_CVV = "";
 
     /**
      * Card Status
@@ -158,7 +158,7 @@ public class MCard {
      * Get CAR_CVV
      * @return CAR_CVV of Card
      */
-    public int getCAR_CVV () {
+    public String getCAR_CVV () {
         return CAR_CVV;
     }
 
@@ -167,7 +167,7 @@ public class MCard {
      * @param CAR_CVV - CVV of Card
      * @return instance of Class
      */
-    public MCard setCAR_CVV (int CAR_CVV) {
+    public MCard setCAR_CVV (String CAR_CVV) {
         this.CAR_CVV = CAR_CVV;
         return this;
     }
