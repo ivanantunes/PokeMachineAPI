@@ -35,7 +35,7 @@ public class MAgency {
      * Build Class
      * @return Instance of Class
      */
-    public static MAgency build () {
+    public static MAgency Build () {
         return new MAgency();
     }
 
