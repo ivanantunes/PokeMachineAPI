@@ -115,8 +115,43 @@ public class ClientAddress implements DBCrud<MClientAddress> {
 
     @Override
     public List<MClientAddress> getAll(String search) {
-        // TODO Auto-generated method stub
-        return null;
+        String sql = "SELECT * FROM CLIENT_ADDRESS";
+
+        if (search != null) {
+            sql = "SELECT * FROM CLIENT_ADDRESS WHERE " +
+            "CLA_ZIP_CODE LIKE '%" + search + "%' OR " +
+            "CLA_ADDRESS LIKE '%" + search + "%' OR " +
+            "CLA_NUMBER LIKE '%" + search + "%' OR " +
+            "CLA_DISTRICTY LIKE '%" + search + "%' OR " +
+            "CLA_CITY LIKE '%" + search + "%' OR " +
+            "CLA_UF LIKE '%" + search + "%' OR " +
+            "CLA_CLI_ID = '%" + search + "%' OR " +
+            "CLA_ID = '" + search + "'";
+        }
+
+        try {
+            Statement stmt = this.connection.createStatement();
+            ResultSet result = stmt.executeQuery(sql);
+
+            List<MClientAddress> lClientAddresses = new ArrayList<MClientAddress>();
+
+            while(result.next()) {
+                MClientAddress clientAddress = MClientAddress.Build()
+                    .setCLA_ID(result.getInt(1))
+                    .setCLA_CLI_ID(result.getInt(2))
+                    .setCLA_ZIP_CODE(result.getString(3))
+                    .setCLA_ADDRESS(result.getString(4))
+                    .setCLA_NUMBER(result.getInt(5))
+                    .setCLA_DISTRICTY(result.getString(6))
+                    .setCLA_CITY(result.getString(7))
+                    .setCLA_UF(result.getString(8));    
+                lClientAddresses.add(clientAddress);
+            }
+
+            return lClientAddresses;
+        } catch (Exception e) {
+            throw new Error(SystemUtil.log("Falha ao Buscar Endereço de Cliente - " + e.getMessage()));
+        }
     }
 
     @Override
@@ -127,8 +162,31 @@ public class ClientAddress implements DBCrud<MClientAddress> {
 
     @Override
     public List<MClientAddress> getDataByID(int id) {
-        // TODO Auto-generated method stub
-        return null;
+        String sql = "SELECT * FROM CLIENT_ADDRESS WHERE CLA_ID = '" + id + "'";
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            ResultSet result = stmt.executeQuery(sql);
+
+            List<MClientAddress> lClientAddress = new ArrayList<MClientAddress>();
+
+            while(result.next()) {
+                MClientAddress clientAddress = MClientAddress.Build()
+                    .setCLA_ID(result.getInt(1))
+                    .setCLA_CLI_ID(result.getInt(2))
+                    .setCLA_ZIP_CODE(result.getString(3))
+                    .setCLA_ADDRESS(result.getString(4))
+                    .setCLA_NUMBER(result.getInt(5))
+                    .setCLA_DISTRICTY(result.getString(6))
+                    .setCLA_CITY(result.getString(7))
+                    .setCLA_UF(result.getString(8));
+                lClientAddress.add(clientAddress);
+            }
+
+            return lClientAddress;
+        } catch (Exception e) {
+            throw new Error(SystemUtil.log("Falha ao Buscar Endereço de Cliente - " + e.getMessage()));
+        }
     }
     
 }
