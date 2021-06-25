@@ -55,7 +55,7 @@ public class MClientAddress {
      * Build Class
      * @return Instance of Class
      */
-    public static MClientAddress build() {
+    public static MClientAddress Build() {
         return new MClientAddress();
     }
 
