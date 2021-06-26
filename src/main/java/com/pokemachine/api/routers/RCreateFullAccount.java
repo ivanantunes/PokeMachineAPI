@@ -23,9 +23,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.pokemachine.api.utils.BCrypt;
 
 /**
  * Create a full account route that cotains all data
+ * 
  * @author gbrextreme
  * @author LucasZaia
  */
@@ -88,11 +90,11 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
     }
 
     @PostMapping("/register/fullaccount")
-    public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data ) {
+    public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data) {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
-        
+
         validator = StringValidator.isValidSting(data.getClient().getCLI_FULL_NAME(), "Nome Completo", 80, 3);
 
         if (!validator.isEmpty()) {
@@ -112,7 +114,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
-            
+
         }
 
         validator = StringValidator.isValidSting(data.getClient().getCLI_BIRTHDAY(), "Data de Aniversário", 10, 10);
@@ -144,7 +146,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         }
 
         validator = StringValidator.isEmpty(String.valueOf(data.getClientAddress().getCLA_NUMBER()), "Numero");
-        
+
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
@@ -171,7 +173,6 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-
         validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 0);
 
         if (!validator.isEmpty()) {
@@ -186,7 +187,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        if (!data.getAccount().getACC_TYPE().contains("P") && !data.getAccount().getACC_TYPE().contains("C") ) {
+        if (!data.getAccount().getACC_TYPE().contains("P") && !data.getAccount().getACC_TYPE().contains("C")) {
             message.setCode(code).setMessage("Tipo Conta está fora do padrão esperado.").setError("");
             return ResponseEntity.status(code).body(message);
         }
@@ -198,7 +199,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isEmpty(String.valueOf(data.getAccount().getACC_AGE_ID()), "Agencia"); 
+        validator = StringValidator.isEmpty(String.valueOf(data.getAccount().getACC_AGE_ID()), "Agencia");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -209,17 +210,19 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(false);
 
             if (clientCrud.getAll(data.getClient().getCLI_RG()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG()).setError("");
+                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG())
+                        .setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
             if (clientCrud.getAll(data.getClient().getCLI_CPF()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF()).setError("");
+                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF())
+                        .setError("");
                 return ResponseEntity.status(code).body(message);
             }
-            
+
             int clientID = clientCrud.insert(data.getClient());
-            
+
             if (clientID == 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Cliente Não Encontrado.").setError("");
@@ -235,12 +238,12 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             if (agencyCrud.getDataByID(data.getAccount().getACC_AGE_ID()).size() <= 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Agencia Não Encontrado.").setError("");
-                return ResponseEntity.status(code).body(message);    
+                return ResponseEntity.status(code).body(message);
             }
 
             // Ver como
-            // String hashPassword = BCrypt.hashpw(accountData.getACC_PASSWORD(), BCrypt.gensalt());
-            //accountData.setACC_PASSWORD();
+            String hashPassword = BCrypt.hashpw(data.getAccount().getACC_PASSWORD(), BCrypt.gensalt());
+            data.getAccount().setACC_PASSWORD(hashPassword);
 
             data.getAccount().setACC_CLI_ID(clientID);
             accountCrud.insert(data.getAccount());
@@ -257,7 +260,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 message.setCode(code).setMessage("Falha ao Cadastrado da Conta Completa").setError(e.getMessage());
                 connection.rollback();
                 connection.setAutoCommit(true);
-                return ResponseEntity.status(code).body(message); 
+                return ResponseEntity.status(code).body(message);
             } catch (Exception err) {
                 code = HttpResponse.INTERNAL_SERVER_ERROR;
                 message.setCode(code).setMessage("Erro Interno do Servidor.").setError(err.getMessage());
@@ -265,5 +268,5 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             }
         }
     }
-    
+
 }
