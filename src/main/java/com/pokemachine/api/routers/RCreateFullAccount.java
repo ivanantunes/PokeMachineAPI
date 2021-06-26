@@ -3,6 +3,7 @@ package com.pokemachine.api.routers;
 import java.sql.Connection;
 import java.util.List;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.AgencyCrud;
 import com.pokemachine.api.crud.ClientAddressCrud;
@@ -22,14 +23,15 @@ import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.web.bind.annotation.RestController;
+// import org.springframework.security.crypto.bcrypt.*;
 
 /**
  * Create a full account route that cotains all data
  * @author gbrextreme
  * @author LucasZaia
  */
+@RestController
 public class RCreateFullAccount implements RouterCrud<MAccount> {
 
     /**
@@ -89,10 +91,11 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
 
     @PostMapping("/register/fullaccount")
     public ResponseEntity<HttpMessage> registerFullAccount(
-        @RequestBody MClient clientData,
-        @RequestBody MClientTelephone telephoneData,
-        @RequestBody MClientAddress addressData,
-        @RequestBody MAccount accountData ) {
+        MClient clientData,
+        MClientTelephone telephoneData,
+        MClientAddress addressData,
+        MAccount accountData) {
+
 
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
@@ -190,8 +193,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        if (accountData.getACC_TYPE().contains("P") || 
-            accountData.getACC_TYPE().contains("C") ) {
+        if (!accountData.getACC_TYPE().contains("P") && !accountData.getACC_TYPE().contains("C") ) {
             message.setCode(code).setMessage("Tipo Conta está fora do padrão esperado.").setError("");
             return ResponseEntity.status(code).body(message);
         }
@@ -209,7 +211,6 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
-
 
         try {
             connection.setAutoCommit(false);
@@ -244,16 +245,18 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);    
             }
 
-            String hashPassword = BCrypt.hashpw(accountData.getACC_PASSWORD(), BCrypt.gensalt());
+            // String hashPassword = BCrypt.hashpw(accountData.getACC_PASSWORD(), BCrypt.gensalt());
             
-            accountData.setACC_PASSWORD(hashPassword);
+            accountData.setACC_PASSWORD(accountData.getACC_PASSWORD());
             accountData.setACC_CLI_ID(clientID);
             accountCrud.insert(accountData);
 
+            connection.commit();
             connection.setAutoCommit(true);
 
             code = HttpResponse.OK;
             message.setCode(code).setMessage("Conta Completa Cadastrado com Sucesso.");
+            return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
             try {
                 code = HttpResponse.BAD_REQUEST;
@@ -267,8 +270,6 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
         }
-
-        return ResponseEntity.status(code).body(message);
     }
     
 }
