@@ -107,10 +107,10 @@ public class AgencyCrud implements DBCrud<MAgency> {
 
     @Override
     public List<MAgency> getAll(String search) {
-        String sql = "SELECT * FROM ACOUNT";
+        String sql = "SELECT * FROM AGENCY";
 
         if (search != null) {
-            sql = "SELECT * FROM ACCOUNT WHERE " +
+            sql = "SELECT * FROM AGENCY WHERE " +
             "AGE_NAME LIKE '%" + search + "%' OR " +
             "AGE_CODE LIKE '%" + search + "%' OR " +
             "AGE_BNK_ID = '" + search + "' OR " + 
