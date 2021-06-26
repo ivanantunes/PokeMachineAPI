@@ -3,7 +3,6 @@ package com.pokemachine.api.routers;
 import java.sql.Connection;
 import java.util.List;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.AgencyCrud;
 import com.pokemachine.api.crud.ClientAddressCrud;
@@ -224,7 +223,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             
             int clientID = clientCrud.insert(data.getClient());
             
-            if (clientID > 0) {
+            if (clientID == 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Cliente Não Encontrado.").setError("");
                 return ResponseEntity.status(code).body(message);

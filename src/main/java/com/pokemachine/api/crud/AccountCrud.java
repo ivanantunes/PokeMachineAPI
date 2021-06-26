@@ -57,7 +57,7 @@ public class AccountCrud implements DBCrud<MAccount> {
     @Override
     public int insert(MAccount value) {
 
-        String sql = "INSERT INTO ACCOUNT (ACC_AGE_ID,ACC_CODE,ACC_PASSWORD,"
+        String sql = "INSERT INTO ACCOUNT (ACC_AGE_ID,ACC_CLI_ID,ACC_CODE,ACC_PASSWORD,"
                 + "ACC_STATUS,ACC_BALANCE,ACC_TYPE) VALUES (?,?,?,?,?,?,?)";
 
         try {

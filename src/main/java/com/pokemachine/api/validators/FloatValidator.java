@@ -33,7 +33,7 @@ public class FloatValidator {
      * @return Message
      */
     public static String isBigger(float value, float size, String label) {
-        if (size < value) {
+        if (size > value) {
             return label + " é maior que " + size;
         }
         return "";
