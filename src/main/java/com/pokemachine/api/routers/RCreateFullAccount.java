@@ -197,7 +197,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = FloatValidator.isBigger(accountData.getACC_BALANCE(), 1, "Saldo");
+        validator = FloatValidator.isBigger(accountData.getACC_BALANCE(), 0, "Saldo");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -239,7 +239,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             addressData.setCLA_CLI_ID(clientID);
             addressCrud.insert(addressData);
 
-            if (agencyCrud.getDataByCode(accountData.getACC_CODE()).size() <= 0) {
+            if (agencyCrud.getDataByID(accountData.getACC_AGE_ID()).size() <= 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Agencia Não Encontrado.").setError("");
                 return ResponseEntity.status(code).body(message);    
