@@ -89,9 +89,6 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
 
     @PostMapping("/register/fullaccount")
     public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data ) {
-
-        SystemUtil.log("Entrou na rota");
-
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
