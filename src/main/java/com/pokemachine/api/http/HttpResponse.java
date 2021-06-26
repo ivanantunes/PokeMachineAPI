@@ -2,14 +2,20 @@ package com.pokemachine.api.http;
 
 /**
  * Class contains the http response codes.
+ * 
  * @author ivanantunes
  */
 public class HttpResponse {
-    
+
     /**
      * Http Response - OK
      */
     public static int OK = 200;
+
+    /**
+     * Http Response - CREATED
+     */
+    public static int CREATED = 201;
 
     /**
      * Http Response - Internal Server Error
@@ -25,7 +31,7 @@ public class HttpResponse {
      * Http Response - Bad Request
      */
     public static int BAD_REQUEST = 400;
-    
+
     /**
      * Http Response - Unauthorized
      */
@@ -34,6 +40,7 @@ public class HttpResponse {
     /**
      * Constructor
      */
-    private HttpResponse() { }
+    private HttpResponse() {
+    }
 
 }

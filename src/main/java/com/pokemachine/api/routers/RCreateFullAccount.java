@@ -15,6 +15,7 @@ import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.models.MClient;
 import com.pokemachine.api.utils.SystemUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
@@ -241,7 +242,6 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            // Ver como
             String hashPassword = BCrypt.hashpw(data.getAccount().getACC_PASSWORD(), BCrypt.gensalt());
             data.getAccount().setACC_PASSWORD(hashPassword);
 
@@ -258,6 +258,110 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             try {
                 code = HttpResponse.BAD_REQUEST;
                 message.setCode(code).setMessage("Falha ao Cadastrado da Conta Completa").setError(e.getMessage());
+                connection.rollback();
+                connection.setAutoCommit(true);
+                return ResponseEntity.status(code).body(message);
+            } catch (Exception err) {
+                code = HttpResponse.INTERNAL_SERVER_ERROR;
+                message.setCode(code).setMessage("Erro Interno do Servidor.").setError(err.getMessage());
+                return ResponseEntity.status(code).body(message);
+            }
+        }
+    }
+
+    @PostMapping("/register/account")
+    public ResponseEntity<HttpMessage> registerAccount(@RequestBody FFullAccount data) {
+        HttpMessage message = HttpMessage.build();
+        int code = HttpResponse.UNAUTHORIZED;
+        String validator = "";
+
+        validator = StringValidator.isValidSting(data.getClient().getCLI_RG(), "RG", 15, 0);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 14);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 0);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = StringValidator.isValidSting(data.getAccount().getACC_TYPE(), "Tipo Conta", 2, 0);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        if (!data.getAccount().getACC_TYPE().contains("P") && !data.getAccount().getACC_TYPE().contains("C")) {
+            message.setCode(code).setMessage("Tipo Conta está fora do padrão esperado.").setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = FloatValidator.isBigger(data.getAccount().getACC_BALANCE(), 0, "Saldo");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = StringValidator.isEmpty(String.valueOf(data.getAccount().getACC_AGE_ID()), "Agencia");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        try {
+            connection.setAutoCommit(false);
+
+            List<MClient> lclient = clientCrud.getAll(data.getClient().getCLI_CPF());
+
+            if (lclient.size() >= 2) {
+                code = HttpResponse.INTERNAL_SERVER_ERROR;
+                message.setCode(code).setMessage("Mais de um cliente foi encontrado com o mesmo documento.")
+                        .setError("");
+                return ResponseEntity.status(code).body(message);
+            } else if (lclient.size() <= 0) {
+                code = HttpResponse.NOT_FOUND;
+                message.setCode(code).setMessage("Nenhum Cliente encontrado com este documento.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            if (agencyCrud.getDataByID(data.getAccount().getACC_AGE_ID()).size() <= 0) {
+                code = HttpResponse.NOT_FOUND;
+                message.setCode(code).setMessage("Nenhuma agência encontrada.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            String hashPassword = BCrypt.hashpw(data.getAccount().getACC_PASSWORD(), BCrypt.gensalt());
+            data.getAccount().setACC_PASSWORD(hashPassword);
+
+            data.getAccount().setACC_CLI_ID(lclient.get(0).getCLI_ID());
+
+            accountCrud.insert(data.getAccount());
+
+            connection.commit();
+            connection.setAutoCommit(true);
+
+            code = HttpResponse.CREATED;
+            message.setCode(code).setMessage("Conta criada com sucesso");
+            return ResponseEntity.status(code).body(message);
+
+        } catch (Exception e) {
+            try {
+                code = HttpResponse.BAD_REQUEST;
+                message.setCode(code).setMessage("Falha ao efetuar cadastro da conta.").setError(e.getMessage());
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
