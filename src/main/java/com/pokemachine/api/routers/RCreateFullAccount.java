@@ -190,9 +190,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        if (accountData.getACC_TYPE().contains("C") || 
-            accountData.getACC_TYPE().contains("D") || 
-            accountData.getACC_TYPE().contains("DC") ) {
+        if (accountData.getACC_TYPE().contains("P") || 
+            accountData.getACC_TYPE().contains("C") ) {
             message.setCode(code).setMessage("Tipo Conta está fora do padrão esperado.").setError("");
             return ResponseEntity.status(code).body(message);
         }
