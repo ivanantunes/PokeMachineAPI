@@ -51,7 +51,7 @@ public class AgencyCrud implements DBCrud<MAgency> {
 
     @Override
     public int insert(MAgency value) {
-        String sql = "INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE VALUES(?,?,?)";
+        String sql = "INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(?,?,?)";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -146,6 +146,30 @@ public class AgencyCrud implements DBCrud<MAgency> {
     @Override
     public List<MAgency> getDataByID(int id) {
         String sql = "SELECT * FROM AGENCY WHERE AGE_ID = '" + id + "'";
+
+        try {
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            ResultSet result = stmt.executeQuery(sql);
+
+            List<MAgency> lAgencies = new ArrayList<MAgency>();
+
+            while(result.next()) {
+                MAgency card = MAgency.Build()
+                    .setAGE_ID(result.getInt(1))
+                    .setAGE_BNK_ID(result.getInt(2))
+                    .setAGE_NAME(result.getString(3))
+                    .setAGE_CODE(result.getString(4));
+                lAgencies.add(card);
+            }
+
+            return lAgencies;
+        } catch (Exception e) {
+            throw new Error(SystemUtil.log("Falha ao Buscar Agencia - " + e.getMessage()));
+        }
+    }
+
+    public List<MAgency> getDataByCode(String code) {
+        String sql = "SELECT * FROM AGENCY WHERE AGE_CODE = '" + code + "'";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);

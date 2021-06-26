@@ -135,7 +135,6 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
 
     @Override
     public DBResult<MCashMachine> getFilteredData(int limit, String search) {
-        // TODO Auto-generated method stub
         return null;
     }
 

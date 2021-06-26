@@ -14,7 +14,7 @@ import com.pokemachine.api.utils.SystemUtil;
  * Client Address Crud
  * @author gbrextreme
  */
-public class ClientAddress implements DBCrud<MClientAddress> {
+public class ClientAddressCrud implements DBCrud<MClientAddress> {
     /**
      * Connection Database
      */
@@ -23,29 +23,29 @@ public class ClientAddress implements DBCrud<MClientAddress> {
     /**
      * Instance of Class
      */
-    private static ClientAddress instance;
+    private static ClientAddressCrud instance;
     
     /**
      * Constructor
      */
-    private ClientAddress() { }
+    private ClientAddressCrud() { }
 
     /**
      * Get Instance
      * @return Instance of Class
      */
-    public static ClientAddress getInstance() {
-        if (ClientAddress.instance == null) {
-            ClientAddress.instance = new ClientAddress();
+    public static ClientAddressCrud getInstance() {
+        if (ClientAddressCrud.instance == null) {
+            ClientAddressCrud.instance = new ClientAddressCrud();
         }
-        return ClientAddress.instance;
+        return ClientAddressCrud.instance;
     }
 
     /**
      * Destroy Instance
      */
     public static void destroyInstance() {
-        ClientAddress.instance = null;
+        ClientAddressCrud.instance = null;
     }
 
     @Override
@@ -156,7 +156,6 @@ public class ClientAddress implements DBCrud<MClientAddress> {
 
     @Override
     public DBResult<MClientAddress> getFilteredData(int limit, String search) {
-        // TODO Auto-generated method stub
         return null;
     }
 

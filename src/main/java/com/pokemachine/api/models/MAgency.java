@@ -2,7 +2,7 @@ package com.pokemachine.api.models;
 
 /**
  * Customer Model
- * autor LucasZaia
+ * @autor LucasZaia
  */
 public class MAgency {
 

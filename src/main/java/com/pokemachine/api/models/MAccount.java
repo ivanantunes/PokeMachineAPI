@@ -2,7 +2,6 @@ package com.pokemachine.api.models;
 
 /**
  * Account Model
- * 
  * @author gbrextreme
  */
 public class MAccount {

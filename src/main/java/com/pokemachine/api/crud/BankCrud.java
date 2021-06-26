@@ -58,7 +58,7 @@ public class BankCrud implements DBCrud<MBank> {
     @Override
     public int insert(MBank value) {
 
-        String sql = "INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES (BNK_NAME = ?, BNK_CODE = ?)";
+        String sql = "INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES (?,?)";
 
         try {
 
