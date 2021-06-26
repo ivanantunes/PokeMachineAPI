@@ -10,26 +10,26 @@ import com.pokemachine.api.crud.ClientCrud;
 import com.pokemachine.api.crud.ClientTelephoneCrud;
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.database.DBService;
+import com.pokemachine.api.forms.FFullAccount;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
-import com.pokemachine.api.models.MClient;
-import com.pokemachine.api.models.MClientAddress;
-import com.pokemachine.api.models.MClientTelephone;
+import com.pokemachine.api.utils.SystemUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.security.crypto.bcrypt.*;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Create a full account route that cotains all data
  * @author gbrextreme
  * @author LucasZaia
  */
+@RestController
 public class RCreateFullAccount implements RouterCrud<MAccount> {
 
     /**
@@ -88,87 +88,86 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
     }
 
     @PostMapping("/register/fullaccount")
-    public ResponseEntity<HttpMessage> registerFullAccount(
-        @RequestBody MClient clientData,
-        @RequestBody MClientTelephone telephoneData,
-        @RequestBody MClientAddress addressData,
-        @RequestBody MAccount accountData ) {
+    public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data ) {
+
+        SystemUtil.log("Entrou na rota");
 
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
         
-        validator = StringValidator.isValidSting(clientData.getCLI_FULL_NAME(), "Nome Completo", 80, 3);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_FULL_NAME(), "Nome Completo", 80, 3);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(clientData.getCLI_RG(), "RG", 15, 0);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_RG(), "RG", 15, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(clientData.getCLI_CPF(), "CPF", 15, 14);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 14);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+            
+        }
+
+        validator = StringValidator.isValidSting(data.getClient().getCLI_BIRTHDAY(), "Data de Aniversário", 10, 10);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(clientData.getCLI_BIRTHDAY(), "Data de Aniversário", 10, 10);
+        validator = StringValidator.isValidSting(data.getClientTelephone().getCLT_TELEPHONE(), "Telefone", 20, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(telephoneData.getCLT_TELEPHONE(), "Telefone", 20, 0);
+        validator = StringValidator.isValidSting(data.getClientAddress().getCLA_ZIP_CODE(), "CEP", 45, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(addressData.getCLA_ZIP_CODE(), "CEP", 45, 0);
+        validator = StringValidator.isValidSting(data.getClientAddress().getCLA_ADDRESS(), "Endereço", 150, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(addressData.getCLA_ADDRESS(), "Endereço", 150, 0);
-
-        if (!validator.isEmpty()) {
-            message.setCode(code).setMessage(validator).setError("");
-            return ResponseEntity.status(code).body(message);
-        }
-
-        validator = StringValidator.isEmpty(String.valueOf(addressData.getCLA_NUMBER()), "Numero");
+        validator = StringValidator.isEmpty(String.valueOf(data.getClientAddress().getCLA_NUMBER()), "Numero");
         
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(addressData.getCLA_DISTRICTY(), "Bairro", 80, 0);
+        validator = StringValidator.isValidSting(data.getClientAddress().getCLA_DISTRICTY(), "Bairro", 80, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(addressData.getCLA_CITY(), "Cidade", 80, 0);
+        validator = StringValidator.isValidSting(data.getClientAddress().getCLA_CITY(), "Cidade", 80, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(addressData.getCLA_UF(), "UF", 2, 0);
+        validator = StringValidator.isValidSting(data.getClientAddress().getCLA_UF(), "UF", 2, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -176,34 +175,33 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         }
 
 
-        validator = StringValidator.isValidSting(accountData.getACC_PASSWORD(), "Senha", 32, 0);
+        validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(accountData.getACC_TYPE(), "Tipo Conta", 2, 0);
+        validator = StringValidator.isValidSting(data.getAccount().getACC_TYPE(), "Tipo Conta", 2, 0);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        if (accountData.getACC_TYPE().contains("P") || 
-            accountData.getACC_TYPE().contains("C") ) {
+        if (!data.getAccount().getACC_TYPE().contains("P") && !data.getAccount().getACC_TYPE().contains("C") ) {
             message.setCode(code).setMessage("Tipo Conta está fora do padrão esperado.").setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = FloatValidator.isBigger(accountData.getACC_BALANCE(), 0, "Saldo");
+        validator = FloatValidator.isBigger(data.getAccount().getACC_BALANCE(), 0, "Saldo");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isEmpty(String.valueOf(accountData.getACC_AGE_ID()), "Agencia"); 
+        validator = StringValidator.isEmpty(String.valueOf(data.getAccount().getACC_AGE_ID()), "Agencia"); 
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -214,17 +212,17 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         try {
             connection.setAutoCommit(false);
 
-            if (clientCrud.getAll(clientData.getCLI_RG()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + clientData.getCLI_RG()).setError("");
+            if (clientCrud.getAll(data.getClient().getCLI_RG()).size() != 0) {
+                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG()).setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
-            if (clientCrud.getAll(clientData.getCLI_CPF()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + clientData.getCLI_CPF()).setError("");
+            if (clientCrud.getAll(data.getClient().getCLI_CPF()).size() != 0) {
+                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF()).setError("");
                 return ResponseEntity.status(code).body(message);
             }
             
-            int clientID = clientCrud.insert(clientData);
+            int clientID = clientCrud.insert(data.getClient());
             
             if (clientID > 0) {
                 code = HttpResponse.NOT_FOUND;
@@ -232,24 +230,26 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            telephoneData.setCLT_CLI_ID(clientID);
-            telephoneCrud.insert(telephoneData);
+            data.getClientTelephone().setCLT_CLI_ID(clientID);
+            telephoneCrud.insert(data.getClientTelephone());
 
-            addressData.setCLA_CLI_ID(clientID);
-            addressCrud.insert(addressData);
+            data.getClientAddress().setCLA_CLI_ID(clientID);
+            addressCrud.insert(data.getClientAddress());
 
-            if (agencyCrud.getDataByID(accountData.getACC_AGE_ID()).size() <= 0) {
+            if (agencyCrud.getDataByID(data.getAccount().getACC_AGE_ID()).size() <= 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Agencia Não Encontrado.").setError("");
                 return ResponseEntity.status(code).body(message);    
             }
 
-            String hashPassword = BCrypt.hashpw(accountData.getACC_PASSWORD(), BCrypt.gensalt());
-            
-            accountData.setACC_PASSWORD(hashPassword);
-            accountData.setACC_CLI_ID(clientID);
-            accountCrud.insert(accountData);
+            // Ver como
+            // String hashPassword = BCrypt.hashpw(accountData.getACC_PASSWORD(), BCrypt.gensalt());
+            //accountData.setACC_PASSWORD();
 
+            data.getAccount().setACC_CLI_ID(clientID);
+            accountCrud.insert(data.getAccount());
+
+            connection.commit();
             connection.setAutoCommit(true);
 
             code = HttpResponse.OK;
