@@ -135,8 +135,8 @@ public class BankCrud implements DBCrud<MBank> {
         }
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            ResultSet result = stmt.executeQuery();
+            Statement stmt = this.connection.createStatement();
+            ResultSet result = stmt.executeQuery(sql);
 
             List<MBank> lBank = new ArrayList<MBank>();
 

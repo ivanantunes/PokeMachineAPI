@@ -23,8 +23,10 @@ import com.pokemachine.api.validators.StringValidator;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 import org.springframework.web.bind.annotation.RequestBody;
-import com.pokemachine.api.utils.BCrypt;
 
 /**
  * Create a full account route that cotains all data
@@ -242,7 +244,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            String hashPassword = BCrypt.hashpw(data.getAccount().getACC_PASSWORD(), BCrypt.gensalt());
+            String hashPassword = BCrypt.withDefaults().hashToString(12,
+                    data.getAccount().getACC_PASSWORD().toCharArray());
             data.getAccount().setACC_PASSWORD(hashPassword);
 
             data.getAccount().setACC_CLI_ID(clientID);
@@ -344,7 +347,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            String hashPassword = BCrypt.hashpw(data.getAccount().getACC_PASSWORD(), BCrypt.gensalt());
+            String hashPassword = BCrypt.withDefaults().hashToString(12,
+                    data.getAccount().getACC_PASSWORD().toCharArray());
             data.getAccount().setACC_PASSWORD(hashPassword);
 
             data.getAccount().setACC_CLI_ID(lclient.get(0).getCLI_ID());

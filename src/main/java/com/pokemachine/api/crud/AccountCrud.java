@@ -149,7 +149,7 @@ public class AccountCrud implements DBCrud<MAccount> {
         }
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            Statement stmt = this.connection.createStatement();
             ResultSet result = stmt.executeQuery(sql);
 
             List<MAccount> lAccount = new ArrayList<MAccount>();

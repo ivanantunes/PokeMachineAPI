@@ -131,10 +131,26 @@ public class HistoricCrud implements DBCrud<MHistoric> {
         if (search != null) {
             sql = "SELECT * FROM HISTORIC WHERE " + "HIS_CSM_ID LIKE '% OR" + search + "%' OR" + "HIS_ACC_ID LIKE '%"
                     + search + "%' OR" + "HIS_OPERATION LIKE '%" + search + "%' OR" + "HIS_DATETIME LIKE '%" + search
-                    + "%' OR" + "HIS_VALUE LIKE '%" + search + "%' OR" + "HIS_ID";
+                    + "%' OR" + "HIS_VALUE LIKE '%" + search + "%' OR" + "HIS_ID ='" + search + "'";
         }
+        try {
 
-        return null;
+            Statement stmt = this.connection.createStatement();
+            ResultSet result = stmt.executeQuery(sql);
+
+            List<MHistoric> lHistoric = new ArrayList<MHistoric>();
+
+            while (result.next()) {
+                MHistoric historic = MHistoric.build().setHIS_ID(result.getInt(1)).setHIS_ACC_ID(result.getInt(2))
+                        .setHIS_CSM_ID(result.getInt(3)).setHIS_OPERATION(result.getString(4))
+                        .setHIS_DATETIME(result.getDate(5)).setHIS_VALUE(result.getFloat(6));
+
+                lHistoric.add(historic);
+            }
+            return lHistoric;
+        } catch (Exception e) {
+            throw new Error(SystemUtil.log("Falha ao Buscar Historico" + e.getMessage()));
+        }
     }
 
     @Override
@@ -145,8 +161,29 @@ public class HistoricCrud implements DBCrud<MHistoric> {
 
     @Override
     public List<MHistoric> getDataByID(int id) {
-        // TODO Auto-generated method stub
-        return null;
+
+        String sql = "SELECT * FROM HISTORIC WHERE HIS_ID = '" + id + "'";
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            ResultSet result = stmt.executeQuery();
+
+            List<MHistoric> lHistoric = new ArrayList<MHistoric>();
+
+            while (result.next()) {
+                MHistoric historic = MHistoric.build().setHIS_ID(result.getInt(1)).setHIS_ACC_ID(result.getInt(2))
+                        .setHIS_CSM_ID(result.getInt(3)).setHIS_OPERATION(result.getString(4))
+                        .setHIS_DATETIME(result.getDate(5)).setHIS_VALUE(result.getFloat(6));
+
+                lHistoric.add(historic);
+            }
+
+            return lHistoric;
+
+        } catch (Exception e) {
+            throw new Error(SystemUtil.log("Falha ao Buscar este Histórico"));
+        }
     }
 
 }
