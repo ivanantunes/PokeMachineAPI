@@ -233,8 +233,8 @@ public class CardCrud implements DBCrud<MCard> {
 
         try {
 
-            BigInteger minCode = new BigInteger("100000000000000");
-            BigInteger maxCode = new BigInteger("99999999999999999999");
+            BigInteger minCode = new BigInteger("1000000000000000");
+            BigInteger maxCode = new BigInteger("9999999999999999");
             data.setCAR_CODE(String.valueOf(SystemUtil.randomNumber(minCode, maxCode)));
             
             BigInteger minCvv = new BigInteger("100");

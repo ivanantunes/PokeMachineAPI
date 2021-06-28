@@ -204,3 +204,22 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- Insert `POKE_MACHINE`.`BANK`
+-- -----------------------------------------------------
+INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES ("BANCO DO BRASIL", "01");
+INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES ("ITAU", "33");
+INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES ("CAIXA", "65");
+INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES ("SANTANDER", "93");
+INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES ("BRADESCO", "105");
+
+-- -----------------------------------------------------
+-- Insert `POKE_MACHINE`.`AGENCY`
+-- -----------------------------------------------------
+
+INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(1, "Banco do Brasil S.A. - Sorocaba", "99547");
+INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(2, "Itaú - Boituva","19879");
+INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(3, "Caixa Economica - Tietê", "16794");
+INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(4, "Santander - Sorocaba", "47244");
+INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(5, "Bradesco - Sorocaba", "10547");

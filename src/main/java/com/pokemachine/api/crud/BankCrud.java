@@ -58,7 +58,7 @@ public class BankCrud implements DBCrud<MBank> {
     @Override
     public int insert(MBank value) {
 
-        String sql = "INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES (BNK_NAME = ?, BNK_CODE = ?)";
+        String sql = "INSERT INTO BANK (BNK_NAME,BNK_CODE) VALUES (?,?)";
 
         try {
 
@@ -135,8 +135,8 @@ public class BankCrud implements DBCrud<MBank> {
         }
 
         try {
-            PreparedStatement stmt = this.connection.prepareStatement(sql);
-            ResultSet result = stmt.executeQuery();
+            Statement stmt = this.connection.createStatement();
+            ResultSet result = stmt.executeQuery(sql);
 
             List<MBank> lBank = new ArrayList<MBank>();
 

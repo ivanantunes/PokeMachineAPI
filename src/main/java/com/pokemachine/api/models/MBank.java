@@ -2,7 +2,7 @@ package com.pokemachine.api.models;
 
 /**
  * Customer Model
- * author LucasZaia
+ * @author LucasZaia
  */
 public class MBank {
 

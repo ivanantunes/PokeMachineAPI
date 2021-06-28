@@ -1,7 +1,5 @@
 package com.pokemachine.api.models;
 
-import java.util.Date;
-
 /**
  * Card Model
  * @author gbrextreme 
@@ -14,6 +12,16 @@ public class MTransferHistory {
     private int TRH_ID = 0;
 
     /**
+     * Tranfer Origin Account ID
+     */
+    private int TRH_ORIGIN_ACC_ID = 0;
+
+    /**
+     * Transfer Destiny Account ID
+     */
+    private int TRH_DESTINY_ACC_ID = 0;
+
+    /**
      * Transfer History Value
      */
     private float TRH_VALUE = 0;
@@ -21,7 +29,7 @@ public class MTransferHistory {
     /**
      * Transfer History Date Time
      */
-    private Date TRH_DATETIME;
+    private String TRH_DATETIME;
 
     /**
      * Constructor
@@ -78,7 +86,7 @@ public class MTransferHistory {
      * @param TRH_DATETIME - Date Time of Transfer History
      * @return instance of Class
      */
-    public MTransferHistory setTRH_DATETIME (Date TRH_DATETIME) {
+    public MTransferHistory setTRH_DATETIME (String TRH_DATETIME) {
         this.TRH_DATETIME = TRH_DATETIME;
         return this;
     }
@@ -87,8 +95,44 @@ public class MTransferHistory {
      * Get TRH_DATETIME
      * @return TRH_DATETIME of Transfer History
      */
-    public Date getTRH_DATETIME () {
+    public String getTRH_DATETIME () {
         return TRH_DATETIME;
     }
 
+    /**
+     * Get TRH_ORIGIN_ACC_ID
+     * @return TRH_ORIGIN_ACC_ID of Transfer History
+     */
+    public int getTRH_ORIGIN_ACC_ID() {
+        return TRH_ORIGIN_ACC_ID;
+    }
+
+    /**
+     * Set TRH_ORIGIN_ACC_ID
+     * @param TRH_ORIGIN_ACC_ID - ID Origin Account of Transfer History
+     * @return Instance of Class
+     */
+    public MTransferHistory setTRH_ORIGIN_ACC_ID(int TRH_ORIGIN_ACC_ID) {
+        this.TRH_ORIGIN_ACC_ID = TRH_ORIGIN_ACC_ID;
+        return this;
+    }
+
+    /**
+     * Get TRH_DESTINY_ACC_ID
+     * @return TRH_DESTINY_ACC_ID of Transfer History
+     */
+    public int getTRH_DESTINY_ACC_ID() {
+        return TRH_DESTINY_ACC_ID;
+    }
+
+    /**
+     * Set TRH_DESTINY_ACC_ID
+     * @param TRH_DESTINY_ACC_ID - ID Destiny Account of Transfer History
+     * @return Instance of Class
+     */
+    public MTransferHistory setTRH_DESTINY_ACC_ID(int TRH_DESTINY_ACC_ID) {
+        this.TRH_DESTINY_ACC_ID = TRH_DESTINY_ACC_ID;
+        return this;
+    }
+    
 }
