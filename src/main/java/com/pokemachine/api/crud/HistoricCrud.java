@@ -87,18 +87,19 @@ public class HistoricCrud implements DBCrud<MHistoric> {
     @Override
     public MHistoric update(MHistoric value) {
 
-        String sql = "UPDATE HISTORIC SET HIS_CSM_ID = ?, HIS_ACC_ID = ?,"
-                + "HIS_OPERATION = ?, HIS_DATETIME = ?, HIS_VALUE WHERE HIS_ID = ?";
+        String sql = "UPDATE HISTORIC SET HIS_CSM_ID = ?, HIS_ACC_ID = ?, "
+                   + "HIS_OPERATION = ?, HIS_DATETIME = ?, HIS_VALUE  = ? " 
+                   + "WHERE HIS_ID = ?";
 
         try {
-
             PreparedStatement stmt = this.connection.prepareStatement(sql);
-            stmt.setInt(1, value.getHIS_ID());
-            stmt.setInt(2, value.getHIS_CSM_ID());
-            stmt.setInt(3, value.getHIS_ACC_ID());
-            stmt.setString(4, value.getHIS_OPERATION());
-            stmt.setDate(5, value.getHIS_DATETIME());
-            stmt.setFloat(6, value.getHIS_VALUE());
+            
+            stmt.setInt(1, value.getHIS_CSM_ID());
+            stmt.setInt(2, value.getHIS_ACC_ID());
+            stmt.setString(3, value.getHIS_OPERATION());
+            stmt.setDate(4, value.getHIS_DATETIME());
+            stmt.setFloat(5, value.getHIS_VALUE());
+            stmt.setInt(6, value.getHIS_ID());
             stmt.executeUpdate();
 
             return value;
