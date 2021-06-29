@@ -111,7 +111,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 11);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 14, 11);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -288,7 +288,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 14);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 14, 11);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
