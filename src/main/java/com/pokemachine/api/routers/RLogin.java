@@ -58,7 +58,6 @@ public class RLogin implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);    
         }
 
-
         try {
             List<MAccount> lAccounts = accountCrud.getAll(data.getACC_CODE());
 
@@ -89,15 +88,13 @@ public class RLogin implements RouterCrud<MAccount> {
             }
 
             //TODO: Mater sessão 
-            //TODO: Enviar token pelo cabeçalho
 
-            HttpHeaders responseHeaders = new HttpHeaders();
-            responseHeaders.set("sesssion-value", "");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("session-value", "");
 
-            return ResponseEntity
-                    .status(code)
-                    .headers(responseHeaders)
-                    .body(message);
+            code = HttpResponse.OK;
+            message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
+            return ResponseEntity.status(code).headers(headers).body(message);
 
         } catch (Exception e) {
             try {
@@ -110,11 +107,6 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
         }
-        
-        
-
-        
-        return null;
     }
 
     @Override
