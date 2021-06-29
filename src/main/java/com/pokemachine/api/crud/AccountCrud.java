@@ -35,7 +35,6 @@ public class AccountCrud implements DBCrud<MAccount> {
 
     /**
      * Get Instance
-     * 
      * @return Instance of Class
      */
     public static AccountCrud getInstance() {
@@ -65,6 +64,7 @@ public class AccountCrud implements DBCrud<MAccount> {
             BigInteger min = new BigInteger("100000000000000");
             BigInteger max = new BigInteger("999999999999999");
             value.setACC_CODE(String.valueOf(SystemUtil.randomNumber(min, max)));
+            value.setACC_STATUS(true);
 
             try {
                 PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -73,7 +73,7 @@ public class AccountCrud implements DBCrud<MAccount> {
                 stmt.setInt(2, value.getACC_CLI_ID());
                 stmt.setString(3, value.getACC_CODE());
                 stmt.setString(4, value.getACC_PASSWORD());
-                stmt.setBoolean(5, true);
+                stmt.setBoolean(5, value.getACC_STATUS());
                 stmt.setFloat(6, value.getACC_BALANCE());
                 stmt.setString(7, value.getACC_TYPE());
                 stmt.executeUpdate();

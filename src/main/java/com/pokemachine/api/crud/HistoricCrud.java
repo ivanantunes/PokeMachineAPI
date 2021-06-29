@@ -8,7 +8,6 @@ import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.database.DBService;
 import com.pokemachine.api.interfaces.DBCrud;
 import com.pokemachine.api.models.MHistoric;
-import com.pokemachine.api.models.MHistoric;
 import com.pokemachine.api.utils.SystemUtil;
 
 /**
@@ -156,7 +155,6 @@ public class HistoricCrud implements DBCrud<MHistoric> {
 
     @Override
     public DBResult<MHistoric> getFilteredData(int limit, String search) {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -22,6 +22,11 @@ public class HttpMessage {
     private String message = "";
 
     /**
+     * Http Object Result
+     */
+    private Object result = null;
+
+    /**
      * Constructor
      */
     private HttpMessage() { }
@@ -85,6 +90,24 @@ public class HttpMessage {
      */
     public HttpMessage setMessage(String message) {
         this.message = message;
+        return this;
+    }
+
+    /**
+     * Get 
+     * @return Object of Http Message
+     */
+    public Object getResult() {
+        return result;
+    }
+
+    /**
+     * Set Result
+     * @param result - Object of Http Message
+     * @return Instance of HttpMessage
+     */
+    public HttpMessage setResult(Object result) {
+        this.result = result;
         return this;
     }
 

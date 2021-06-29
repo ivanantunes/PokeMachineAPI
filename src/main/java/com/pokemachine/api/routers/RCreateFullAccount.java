@@ -16,7 +16,6 @@ import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MClient;
-import com.pokemachine.api.utils.SystemUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
@@ -112,7 +111,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 14);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 11);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -253,9 +252,17 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
 
             connection.commit();
             connection.setAutoCommit(true);
+            Object Parameters = new Object() {
+                String Document = data.getClient().getCLI_CPF();
+                String AccountCode = data.getAccount().getACC_CODE();
+            };
 
             code = HttpResponse.OK;
-            message.setCode(code).setMessage("Conta Completa Cadastrado com Sucesso.");
+            message
+                .setCode(code)
+                .setMessage("Conta Completa Cadastrado com Sucesso.")
+                .setResult(Parameters);
+
             return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
             try {
