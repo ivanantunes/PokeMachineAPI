@@ -252,16 +252,12 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
 
             connection.commit();
             connection.setAutoCommit(true);
-            Object Parameters = new Object() {
-                String Document = data.getClient().getCLI_CPF();
-                String AccountCode = data.getAccount().getACC_CODE();
-            };
 
             code = HttpResponse.OK;
             message
                 .setCode(code)
                 .setMessage("Conta Completa Cadastrado com Sucesso.")
-                .setResult(Parameters);
+                .setResult(data.getAccount().getACC_CODE());
 
             return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
@@ -366,7 +362,10 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.CREATED;
-            message.setCode(code).setMessage("Conta criada com sucesso");
+            message
+                .setCode(code)
+                .setMessage("Conta criada com sucesso")
+                .setResult(data.getAccount().getACC_CODE());
             return ResponseEntity.status(code).body(message);
 
         } catch (Exception e) {
