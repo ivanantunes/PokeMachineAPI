@@ -54,7 +54,6 @@ public class MAccount {
 
     /**
      * Build Class
-     * 
      * @return New Instance of MAccount
      */
     public static MAccount Build() {
@@ -63,7 +62,6 @@ public class MAccount {
 
     /**
      * Set ACC_ID
-     * 
      * @param ACC_ID - Account ID
      * @return Instance of Class
      */
@@ -74,7 +72,6 @@ public class MAccount {
 
     /**
      * Get ACC_ID
-     * 
      * @return ACC_ID of Account
      */
     public int getACC_ID() {
@@ -83,7 +80,6 @@ public class MAccount {
 
     /**
      * Set ACC_CLI_ID
-     * 
      * @param ACC_CLI_ID - Account Client ID
      * @return Instance of Class
      */
@@ -94,7 +90,6 @@ public class MAccount {
 
     /**
      * Get ACC_CLI_ID
-     * 
      * @return ACC_CLI_ID of Account
      */
     public int getACC_CLI_ID() {
@@ -103,7 +98,6 @@ public class MAccount {
 
     /**
      * Set ACC_AGE_ID
-     * 
      * @param ACC_AGE_ID - Account Agency ID
      * @return Instance of Class
      */
@@ -114,7 +108,6 @@ public class MAccount {
 
     /**
      * Get ACC_AGE_ID
-     * 
      * @return ACC_AGE_ID of Account
      */
     public int getACC_AGE_ID() {
@@ -123,7 +116,6 @@ public class MAccount {
 
     /**
      * Set ACC_CODE
-     * 
      * @param ACC_CODE - Account Code
      * @return Instance of Class
      */
@@ -134,7 +126,6 @@ public class MAccount {
 
     /**
      * Get ACC_CODE
-     * 
      * @return ACC_CODE of Account
      */
     public String getACC_CODE() {
@@ -143,7 +134,6 @@ public class MAccount {
 
     /**
      * Set ACC_PASSWORD
-     * 
      * @param ACC_PASSWORD - Account Password
      * @return Instance of Class
      */
@@ -154,7 +144,6 @@ public class MAccount {
 
     /**
      * Get ACC_PASSWORD
-     * 
      * @return ACC_PASSWORD of Account
      */
     public String getACC_PASSWORD() {
@@ -163,7 +152,6 @@ public class MAccount {
 
     /**
      * Set ACC_STATUS
-     * 
      * @param ACC_STATUS - Account Status
      * @return Instance of Class
      */
@@ -174,7 +162,6 @@ public class MAccount {
 
     /**
      * Get ACC_STATUS
-     * 
      * @return ACC_STATUS of Account
      */
     public boolean getACC_STATUS() {
@@ -183,7 +170,6 @@ public class MAccount {
 
     /**
      * Set ACC_BALANCE
-     * 
      * @param ACC_BALANCE - Account Balance
      * @return Instance of Classs
      */
@@ -194,7 +180,6 @@ public class MAccount {
 
     /**
      * Get ACC_BALANCE
-     * 
      * @return ACC_BALANCE of Account
      */
     public float getACC_BALANCE() {
@@ -203,7 +188,6 @@ public class MAccount {
 
     /**
      * Set ACC_TYPE
-     * 
      * @param ACC_TYPE - Account Type
      * @return Instance of Class
      */
@@ -214,7 +198,6 @@ public class MAccount {
 
     /**
      * Get ACC_TYPE
-     * 
      * @return ACC_TYPE of Account
      */
     public String getACC_TYPE() {

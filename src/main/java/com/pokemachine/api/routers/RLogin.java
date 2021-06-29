@@ -9,11 +9,15 @@ import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.validators.StringValidator;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import at.favre.lib.crypto.bcrypt.BCrypt;
 
 /**
  * Create a full account route that cotains all data
@@ -39,6 +43,76 @@ public class RLogin implements RouterCrud<MAccount> {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
+
+        validator = StringValidator.isValidSting(data.getACC_CODE(), "Codigo Conta", 15, 1);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = StringValidator.isValidSting(data.getACC_PASSWORD(), "Senha", 32, 6);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);    
+        }
+
+
+        try {
+            List<MAccount> lAccounts = accountCrud.getAll(data.getACC_CODE());
+
+            if (lAccounts.size() >= 2) {
+                code = HttpResponse.INTERNAL_SERVER_ERROR;
+                message
+                    .setCode(code)
+                    .setMessage("Mais de uma conta foi encontrada com o numero informado.")
+                    .setError("");
+                return ResponseEntity.status(code).body(message); 
+            } else if (lAccounts.size() <= 0) {
+                code = HttpResponse.NOT_FOUND;
+                message
+                    .setCode(code)
+                    .setMessage("Nenhuma Conta encontrado com o numero informado.")
+                    .setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            String hashPassword = BCrypt
+                .withDefaults()
+                .hashToString(12,data.getACC_PASSWORD().toCharArray());
+
+            if (hashPassword != lAccounts.get(0).getACC_PASSWORD()) {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Senha invalida ou não coincidem.").setError("");
+                return ResponseEntity.status(code).body(message);     
+            }
+
+            //TODO: Mater sessão 
+            //TODO: Enviar token pelo cabeçalho
+
+            HttpHeaders responseHeaders = new HttpHeaders();
+            responseHeaders.set("sesssion-value", "");
+
+            return ResponseEntity
+                    .status(code)
+                    .headers(responseHeaders)
+                    .body(message);
+
+        } catch (Exception e) {
+            try {
+                code = HttpResponse.BAD_REQUEST;
+                message.setCode(code).setMessage("Falha ao efetuar login.").setError(e.getMessage());
+                return ResponseEntity.status(code).body(message);
+            } catch (Exception err) {
+                code = HttpResponse.INTERNAL_SERVER_ERROR;
+                message.setCode(code).setMessage("Erro Interno do Servidor.").setError(err.getMessage());
+                return ResponseEntity.status(code).body(message);
+            }
+        }
+        
+        
+
         
         return null;
     }

@@ -175,7 +175,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 0);
+        validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 6);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
