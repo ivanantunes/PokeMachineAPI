@@ -2,8 +2,6 @@ package com.pokemachine.api.models;
 
 import java.sql.Date;
 
-import com.pokemachine.api.enums.EHistoricOperation;
-
 /**
  * Customer Historic Model
  * 
