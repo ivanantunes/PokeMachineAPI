@@ -93,16 +93,15 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            new ProxyUtil().startSession(data);
-
-            //TODO: Padrao Proxy 
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("session-value", "");
-
-            code = HttpResponse.OK;
-            message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
-            return ResponseEntity.status(code).headers(headers).body(message);
+            if (ProxyUtil.Build().startSession(data)) {
+                code = HttpResponse.OK;
+                message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
+                return ResponseEntity.status(code).body(message);
+            } else {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Falha ao efetuar login.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
 
         } catch (Exception e) {
             try {

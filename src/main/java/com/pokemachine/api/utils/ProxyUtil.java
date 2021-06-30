@@ -6,6 +6,19 @@ import com.pokemachine.api.proxy.Session;
 
 public class ProxyUtil implements ProxyService {
 
+    /**
+     * Constructor
+     */
+    private ProxyUtil() { }
+
+    /**
+     * Build Class
+     * @return Instance of Class ProxyUtil
+     */
+    public static ProxyUtil Build() {
+        return new ProxyUtil();
+    }
+
     @Override
     public boolean startSession(FLogin data) {
         return Session.getInstance().startSession(data);
