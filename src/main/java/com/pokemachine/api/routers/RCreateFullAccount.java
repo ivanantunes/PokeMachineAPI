@@ -20,6 +20,7 @@ import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -91,6 +92,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         return null;
     }
 
+    @CrossOrigin
     @PostMapping("/register/fullaccount")
     public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data) {
         HttpMessage message = HttpMessage.build();
@@ -110,8 +112,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
-
-        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 14, 11);
+      
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 11);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
