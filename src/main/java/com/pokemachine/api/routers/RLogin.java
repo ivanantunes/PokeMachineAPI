@@ -10,6 +10,7 @@ import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.utils.ProxyUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
@@ -22,8 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 /**
- * Create a full account route that cotains all data
- * 
+ * Create a login route that login data
  * @author gbrextreme
  * @author LucasZaia
  */
@@ -60,7 +60,7 @@ public class RLogin implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);    
         }
 
-        validator = FloatValidator.isSmaller(data.getCASH_MACHINE_ID(), 0, "Caixa Eletronico") 
+        validator = FloatValidator.isSmaller(data.getCASH_MACHINE_ID(), 0, "Caixa Eletronico");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -75,7 +75,7 @@ public class RLogin implements RouterCrud<MAccount> {
         }
 
         try {
-            List<MAccount> lAccounts = accountCrud.getAll(data.getACC_CODE());
+            List<MAccount> lAccounts = accountCrud.getAll(data.getCODE());
 
             if (lAccounts.size() >= 2) {
                 code = HttpResponse.INTERNAL_SERVER_ERROR;
@@ -92,6 +92,8 @@ public class RLogin implements RouterCrud<MAccount> {
                     .setError("");
                 return ResponseEntity.status(code).body(message);
             }
+
+            new ProxyUtil().startSession(data);
 
             //TODO: Padrao Proxy 
 
