@@ -112,7 +112,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
-
+      
         validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 11);
 
         if (!validator.isEmpty()) {
@@ -177,7 +177,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 0);
+        validator = StringValidator.isValidSting(data.getAccount().getACC_PASSWORD(), "Senha", 32, 6);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -256,7 +256,9 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.OK;
-            message.setCode(code).setMessage("Conta Completa Cadastrado com Sucesso.");
+            message.setCode(code).setMessage("Conta Completa Cadastrado com Sucesso.")
+                    .setResult(data.getAccount().getACC_CODE());
+
             return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
             try {
@@ -286,7 +288,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 14);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 14, 11);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -360,7 +362,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.CREATED;
-            message.setCode(code).setMessage("Conta criada com sucesso");
+            message.setCode(code).setMessage("Conta criada com sucesso").setResult(data.getAccount().getACC_CODE());
             return ResponseEntity.status(code).body(message);
 
         } catch (Exception e) {
