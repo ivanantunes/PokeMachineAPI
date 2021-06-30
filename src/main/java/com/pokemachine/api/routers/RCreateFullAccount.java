@@ -275,6 +275,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/register/account")
     public ResponseEntity<HttpMessage> registerAccount(@RequestBody FFullAccount data) {
         HttpMessage message = HttpMessage.build();
