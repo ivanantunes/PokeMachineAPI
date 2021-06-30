@@ -44,6 +44,24 @@ public class Session implements ProxyService {
     @Override
     public boolean startSession(FLogin data) {
         // TODO Auto-generated method stub
+
+        // validar a conta
+        // validar a senha
+        // validar o caixa
+        
+        // validar se conta senha e caixa ja existem nas sessoes
+            // se exiter valide se os dados sao iguais
+                // se forem iguais passa
+                // se nao erro
+            // se nao existir passa pra gravar
+        
+        // alteraçoes dentro dos caixas
+            // status
+
+        // salva nas sessoes 
+
+        // retorna true
+
         return false;
     }
 
