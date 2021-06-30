@@ -2,6 +2,8 @@ package com.pokemachine.api.routers;
 
 import java.util.List;
 
+import javax.servlet.http.HttpSessionListener;
+
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.ClientCrud;
 import com.pokemachine.api.database.DBResult;
@@ -11,6 +13,7 @@ import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.validators.StringValidator;
 
+import org.springframework.boot.autoconfigure.web.reactive.WebFluxProperties.Session;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,7 +42,7 @@ public class RLogin implements RouterCrud<MAccount> {
     private AccountCrud accountCrud = AccountCrud.getInstance();
 
     @PostMapping("/login")
-    public ResponseEntity<HttpMessage> login(@RequestBody MAccount data)  {
+    public ResponseEntity<HttpMessage> login(@RequestBody MAccount data) {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
@@ -55,7 +58,7 @@ public class RLogin implements RouterCrud<MAccount> {
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
-            return ResponseEntity.status(code).body(message);    
+            return ResponseEntity.status(code).body(message);
         }
 
         try {
@@ -63,31 +66,24 @@ public class RLogin implements RouterCrud<MAccount> {
 
             if (lAccounts.size() >= 2) {
                 code = HttpResponse.INTERNAL_SERVER_ERROR;
-                message
-                    .setCode(code)
-                    .setMessage("Mais de uma conta foi encontrada com o numero informado.")
-                    .setError("");
-                return ResponseEntity.status(code).body(message); 
+                message.setCode(code).setMessage("Mais de uma conta foi encontrada com o numero informado.")
+                        .setError("");
+                return ResponseEntity.status(code).body(message);
             } else if (lAccounts.size() <= 0) {
                 code = HttpResponse.NOT_FOUND;
-                message
-                    .setCode(code)
-                    .setMessage("Nenhuma Conta encontrado com o numero informado.")
-                    .setError("");
+                message.setCode(code).setMessage("Nenhuma Conta encontrado com o numero informado.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
-            String hashPassword = BCrypt
-                .withDefaults()
-                .hashToString(12,data.getACC_PASSWORD().toCharArray());
+            String hashPassword = BCrypt.withDefaults().hashToString(12, data.getACC_PASSWORD().toCharArray());
 
             if (hashPassword != lAccounts.get(0).getACC_PASSWORD()) {
                 code = HttpResponse.UNAUTHORIZED;
                 message.setCode(code).setMessage("Senha invalida ou não coincidem.").setError("");
-                return ResponseEntity.status(code).body(message);     
+                return ResponseEntity.status(code).body(message);
             }
 
-            //TODO: Mater sessão 
+            // TODO: Mater sessão
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("session-value", "");
@@ -133,5 +129,5 @@ public class RLogin implements RouterCrud<MAccount> {
     public ResponseEntity<DBResult<MAccount>> getFilteredData(int limit, String search) {
         return null;
     }
-    
+
 }

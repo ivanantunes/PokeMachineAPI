@@ -20,6 +20,7 @@ import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -254,10 +255,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.OK;
-            message
-                .setCode(code)
-                .setMessage("Conta Completa Cadastrado com Sucesso.")
-                .setResult(data.getAccount().getACC_CODE());
+            message.setCode(code).setMessage("Conta Completa Cadastrado com Sucesso.")
+                    .setResult(data.getAccount().getACC_CODE());
 
             return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
@@ -362,10 +361,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.CREATED;
-            message
-                .setCode(code)
-                .setMessage("Conta criada com sucesso")
-                .setResult(data.getAccount().getACC_CODE());
+            message.setCode(code).setMessage("Conta criada com sucesso").setResult(data.getAccount().getACC_CODE());
             return ResponseEntity.status(code).body(message);
 
         } catch (Exception e) {

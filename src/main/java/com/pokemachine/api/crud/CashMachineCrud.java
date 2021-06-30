@@ -12,10 +12,11 @@ import com.pokemachine.api.utils.SystemUtil;
 
 /**
  * Cash Machine Crud
+ * 
  * @author gbrextreme
  */
 public class CashMachineCrud implements DBCrud<MCashMachine> {
-    
+
     /**
      * Connection Database
      */
@@ -25,14 +26,16 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
      * Instance of Class
      */
     private static CashMachineCrud instance;
-    
+
     /**
      * Constructor
      */
-    private CashMachineCrud() { }
+    private CashMachineCrud() {
+    }
 
     /**
      * Get Instance
+     * 
      * @return Instance of Class
      */
     public static CashMachineCrud getInstance() {
@@ -51,37 +54,39 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
 
     @Override
     public int insert(MCashMachine value) {
-        String sql = "INSERT INTO CASH_MACHINE (CSM_NAME, CSM_AVAILABLE_VALUE) VALUES(?,?)";
+        String sql = "INSERT INTO CASH_MACHINE (CSM_NAME, CSM_AVAILABLE_VALUE) VALUES(?,?,?)";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             stmt.setString(1, value.getCSM_NAME());
             stmt.setFloat(2, value.getCSM_AVAILABLE_VALUE());
+            stmt.setString(3, value.getCSM_STATUS());
             stmt.executeUpdate();
 
             ResultSet result = stmt.getGeneratedKeys();
-            
+
             int id = 0;
             if (result.next()) {
                 id = result.getInt(1);
             }
 
             return id;
-        } catch (Exception  err) {
+        } catch (Exception err) {
             throw new Error(SystemUtil.log("Falha ao Cadastrar Caixa Eletrônico - " + err.getMessage()));
         }
     }
 
     @Override
     public MCashMachine update(MCashMachine value) {
-        String sql = "UPDATE CASH_MACHINE SET CSM_NAME = ?, CSM_AVAILABLE_VALUE = ? WHERE CSM_ID = ?";
+        String sql = "UPDATE CASH_MACHINE SET CSM_NAME = ?, CSM_AVAILABLE_VALUE = ?, CSM_STATUS = ? WHERE CSM_ID = ?";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql);
             stmt.setString(1, value.getCSM_NAME());
             stmt.setFloat(2, value.getCSM_AVAILABLE_VALUE());
-            stmt.setInt(3, value.getCSM_ID());
-            stmt.executeUpdate(); 
+            stmt.setString(3, value.getCSM_STATUS());
+            stmt.setInt(4, value.getCSM_ID());
+            stmt.executeUpdate();
 
             return value;
         } catch (Exception e) {
@@ -107,10 +112,9 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
         String sql = "SELECT * FROM CASH_MACHINE";
 
         if (search != null) {
-            sql = "SELECT * FROM CASH_MACHINE WHERE " +
-            "CSM_NAME LIKE '%" + search + "%' OR " +
-            "CSM_AVAILABLE_VALUE LIKE '%" + search + "%' OR " +
-            "CSM_ID = '" + search + "'";
+            sql = "SELECT * FROM CASH_MACHINE WHERE " + "CSM_NAME LIKE '%" + search + "%' OR "
+                    + "CSM_AVAILABLE_VALUE LIKE '%" + search + "%' OR " + "CSM_STATUS LIKE '%" + search + "%' OR "
+                    + "CSM_ID = '" + search + "'";
         }
 
         try {
@@ -119,11 +123,10 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
 
             List<MCashMachine> lCashMachines = new ArrayList<MCashMachine>();
 
-            while(result.next()) {
-                MCashMachine cashMachine = MCashMachine.Build()
-                    .setCSM_ID(result.getInt(1))
-                    .setCSM_NAME(result.getString(2))
-                    .setCSM_AVAILABLE_VALUE(result.getFloat(3));
+            while (result.next()) {
+                MCashMachine cashMachine = MCashMachine.Build().setCSM_ID(result.getInt(1))
+                        .setCSM_NAME(result.getString(2)).setCSM_AVAILABLE_VALUE(result.getFloat(3))
+                        .setCSM_STATUS(result.getString(4));
                 lCashMachines.add(cashMachine);
             }
 
@@ -148,11 +151,10 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
 
             List<MCashMachine> lCashMachines = new ArrayList<MCashMachine>();
 
-            while(result.next()) {
-                MCashMachine cashMachine = MCashMachine.Build()
-                    .setCSM_ID(result.getInt(1))
-                    .setCSM_NAME(result.getString(2))
-                    .setCSM_AVAILABLE_VALUE(result.getFloat(3));
+            while (result.next()) {
+                MCashMachine cashMachine = MCashMachine.Build().setCSM_ID(result.getInt(1))
+                        .setCSM_NAME(result.getString(2)).setCSM_AVAILABLE_VALUE(result.getFloat(3))
+                        .setCSM_STATUS(result.getString(4));
                 lCashMachines.add(cashMachine);
             }
 
@@ -160,5 +162,5 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
         } catch (Exception e) {
             throw new Error(SystemUtil.log("Falha ao Buscar Agencia - " + e.getMessage()));
         }
-    }  
+    }
 }
