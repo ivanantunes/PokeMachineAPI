@@ -91,6 +91,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         return null;
     }
 
+    //TODO: CROSS
+
     @PostMapping("/register/fullaccount")
     public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data) {
         HttpMessage message = HttpMessage.build();
@@ -256,7 +258,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             code = HttpResponse.OK;
             message
                 .setCode(code)
-                .setMessage("Conta Completa Cadastrado com Sucesso.")
+                .setMessage("Conta Completa Cadastrada com Sucesso.")
                 .setResult(data.getAccount().getACC_CODE());
 
             return ResponseEntity.status(code).body(message);

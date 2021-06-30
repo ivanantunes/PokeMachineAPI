@@ -5,10 +5,12 @@ import java.util.List;
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.ClientCrud;
 import com.pokemachine.api.database.DBResult;
+import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.HttpHeaders;
@@ -39,19 +41,33 @@ public class RLogin implements RouterCrud<MAccount> {
     private AccountCrud accountCrud = AccountCrud.getInstance();
 
     @PostMapping("/login")
-    public ResponseEntity<HttpMessage> login(@RequestBody MAccount data)  {
+    public ResponseEntity<HttpMessage> login(@RequestBody FLogin data)  {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
 
-        validator = StringValidator.isValidSting(data.getACC_CODE(), "Codigo Conta", 15, 1);
+        validator = StringValidator.isValidSting(data.getCODE(), "Codigo Conta", 15, 1);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getACC_PASSWORD(), "Senha", 32, 6);
+        validator = StringValidator.isValidSting(data.getPASSWORD(), "Senha", 32, 6);
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);    
+        }
+
+        validator = FloatValidator.isSmaller(data.getCASH_MACHINE_ID(), 0, "Caixa Eletronico") 
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);    
+        }
+
+        validator = StringValidator.isEmpty(data.getTOKEN(), "Token");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -77,17 +93,7 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            String hashPassword = BCrypt
-                .withDefaults()
-                .hashToString(12,data.getACC_PASSWORD().toCharArray());
-
-            if (hashPassword != lAccounts.get(0).getACC_PASSWORD()) {
-                code = HttpResponse.UNAUTHORIZED;
-                message.setCode(code).setMessage("Senha invalida ou não coincidem.").setError("");
-                return ResponseEntity.status(code).body(message);     
-            }
-
-            //TODO: Mater sessão 
+            //TODO: Padrao Proxy 
 
             HttpHeaders headers = new HttpHeaders();
             headers.add("session-value", "");
