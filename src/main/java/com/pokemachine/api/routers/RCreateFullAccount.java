@@ -11,6 +11,7 @@ import com.pokemachine.api.crud.ClientTelephoneCrud;
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.database.DBService;
 import com.pokemachine.api.forms.FFullAccount;
+import com.pokemachine.api.forms.FAccount;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
@@ -112,7 +113,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
-      
+
         validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 11);
 
         if (!validator.isEmpty()) {
@@ -277,7 +278,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
 
     @CrossOrigin
     @PostMapping("/register/account")
-    public ResponseEntity<HttpMessage> registerAccount(@RequestBody FFullAccount data) {
+    public ResponseEntity<HttpMessage> registerAccount(@RequestBody FAccount data) {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
