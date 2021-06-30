@@ -3,8 +3,6 @@ package com.pokemachine.api.proxy;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.crypto.EncryptedPrivateKeyInfo;
-
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.CashMachineCrud;
 import com.pokemachine.api.forms.FLogin;
@@ -17,12 +15,18 @@ import at.favre.lib.crypto.bcrypt.BCrypt;
 public class Session implements ProxyService {
 
     /**
-     * 
+     * List Sessions
      */
     private List<FLogin> SESSIONS = new ArrayList<FLogin>();
 
+    /**
+     * Account Crud
+     */
     private AccountCrud accountcrud = AccountCrud.getInstance();
 
+    /**
+     * Cash Machine Crud
+     */
     private CashMachineCrud cashMachineCrud = CashMachineCrud.getInstance();
 
     /**
@@ -57,7 +61,6 @@ public class Session implements ProxyService {
 
     @Override
     public boolean startSession(FLogin data) {
-        // TODO Auto-generated method stub
 
         // validar a conta
         List<MAccount> laccount = accountcrud.getAll(data.getCODE());
@@ -68,10 +71,11 @@ public class Session implements ProxyService {
             return false;
         }
 
-        String hashpassword = BCrypt.withDefaults().hashToString(12, data.getPASSWORD().toCharArray());
+        char[] hashpassword = BCrypt.withDefaults().hashToChar(12, data.getPASSWORD().toCharArray());
 
-        if (laccount.get(0).getACC_PASSWORD() != hashpassword) {
+        BCrypt.Result result = BCrypt.verifyer().verify(laccount.get(0).getACC_PASSWORD().toCharArray(), hashpassword);
 
+        if (result.verified == false) {
             return false;
         }
 
