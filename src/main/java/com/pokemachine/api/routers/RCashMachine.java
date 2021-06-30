@@ -26,7 +26,7 @@ public class RCashMachine implements RouterCrud<MCashMachine> {
     private CashMachineCrud cashMachineCrud = CashMachineCrud.getInstance();
 
     @Override
-    @GetMapping("/all/cashmachine")
+    @GetMapping("/all/cashMachine")
     public ResponseEntity<List<MCashMachine>> getAll(String search) {
         int code = HttpResponse.UNAUTHORIZED;
 
