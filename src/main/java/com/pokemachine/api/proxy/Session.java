@@ -72,7 +72,6 @@ public class Session implements ProxyService {
         }
 
         char[] hashpassword = BCrypt.withDefaults().hashToChar(12, data.getPASSWORD().toCharArray());
-
         BCrypt.Result result = BCrypt.verifyer().verify(laccount.get(0).getACC_PASSWORD().toCharArray(), hashpassword);
 
         if (result.verified == false) {
