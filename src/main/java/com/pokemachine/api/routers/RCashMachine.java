@@ -12,6 +12,7 @@ import com.pokemachine.api.models.MCashMachine;
 import org.springframework.boot.autoconfigure.web.reactive.WebFluxProperties.Session;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,6 +27,7 @@ public class RCashMachine implements RouterCrud<MCashMachine> {
     private CashMachineCrud cashMachineCrud = CashMachineCrud.getInstance();
 
     @Override
+    @CrossOrigin
     @GetMapping("/all/cashMachine")
     public ResponseEntity<List<MCashMachine>> getAll(String search) {
         int code = HttpResponse.UNAUTHORIZED;
