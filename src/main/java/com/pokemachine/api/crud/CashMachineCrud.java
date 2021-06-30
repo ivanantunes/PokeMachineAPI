@@ -54,7 +54,7 @@ public class CashMachineCrud implements DBCrud<MCashMachine> {
 
     @Override
     public int insert(MCashMachine value) {
-        String sql = "INSERT INTO CASH_MACHINE (CSM_NAME, CSM_AVAILABLE_VALUE) VALUES(?,?,?)";
+        String sql = "INSERT INTO CASH_MACHINE (CSM_NAME, CSM_AVAILABLE_VALUE,CSM_STATUS) VALUES(?,?,?)";
 
         try {
             PreparedStatement stmt = this.connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);

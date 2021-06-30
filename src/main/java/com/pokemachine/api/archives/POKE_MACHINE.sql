@@ -224,3 +224,14 @@ INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(2, "Itaú - Boituva",
 INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(3, "Caixa Economica - Tietê", "16794");
 INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(4, "Santander - Sorocaba", "47244");
 INSERT INTO AGENCY (AGE_BNK_ID, AGE_NAME, AGE_CODE) VALUES(5, "Bradesco - Sorocaba", "10547");
+
+
+-- -----------------------------------------------------
+-- Insert `POKE_MACHINE`.`CASH_MACHINE`
+-- -----------------------------------------------------
+
+INSERT INTO `cash_machine`(`CSM_NAME`, `CSM_AVAILABLE_VALUE`, `CSM_STATUS`) VALUES ('Caixa 01',150.50,'AT');
+INSERT INTO `cash_machine`(`CSM_NAME`, `CSM_AVAILABLE_VALUE`, `CSM_STATUS`) VALUES ('Caixa 02',250.50,'AT');
+INSERT INTO `cash_machine`(`CSM_NAME`, `CSM_AVAILABLE_VALUE`, `CSM_STATUS`) VALUES ('Caixa 03',350.50,'AT');
+INSERT INTO `cash_machine`(`CSM_NAME`, `CSM_AVAILABLE_VALUE`, `CSM_STATUS`) VALUES ('Caixa 04',50,'AT');
+INSERT INTO `cash_machine`(`CSM_NAME`, `CSM_AVAILABLE_VALUE`, `CSM_STATUS`) VALUES ('Caixa 05',50,'IN');
