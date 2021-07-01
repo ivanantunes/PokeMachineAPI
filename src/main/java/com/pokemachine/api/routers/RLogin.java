@@ -13,6 +13,7 @@ import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,7 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class RLogin implements RouterCrud<MAccount> {
-
+    
+    @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<HttpMessage> login(@RequestBody FLogin data)  {
         HttpMessage message = HttpMessage.build();
