@@ -14,13 +14,10 @@ import com.pokemachine.api.utils.ProxyUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-
-import at.favre.lib.crypto.bcrypt.BCrypt;
 
 /**
  * Create a login route that login data
@@ -71,28 +68,11 @@ public class RLogin implements RouterCrud<MAccount> {
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
-            return ResponseEntity.status(code).body(message);    
+            return ResponseEntity.status(code).body(message);
         }
 
         try {
-            List<MAccount> lAccounts = accountCrud.getAll(data.getCODE());
-
-            if (lAccounts.size() >= 2) {
-                code = HttpResponse.INTERNAL_SERVER_ERROR;
-                message
-                    .setCode(code)
-                    .setMessage("Mais de uma conta foi encontrada com o numero informado.")
-                    .setError("");
-                return ResponseEntity.status(code).body(message); 
-            } else if (lAccounts.size() <= 0) {
-                code = HttpResponse.NOT_FOUND;
-                message
-                    .setCode(code)
-                    .setMessage("Nenhuma Conta encontrado com o numero informado.")
-                    .setError("");
-                return ResponseEntity.status(code).body(message);
-            }
-
+            
             if (ProxyUtil.Build().startSession(data)) {
                 code = HttpResponse.OK;
                 message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
@@ -140,5 +120,5 @@ public class RLogin implements RouterCrud<MAccount> {
     public ResponseEntity<DBResult<MAccount>> getFilteredData(int limit, String search) {
         return null;
     }
-    
+
 }

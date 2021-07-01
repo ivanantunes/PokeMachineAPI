@@ -11,6 +11,7 @@ import com.pokemachine.api.crud.ClientTelephoneCrud;
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.database.DBService;
 import com.pokemachine.api.forms.FFullAccount;
+import com.pokemachine.api.forms.FAccount;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
@@ -20,6 +21,7 @@ import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -91,8 +93,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         return null;
     }
 
-    //TODO: CROSS
-
+    @CrossOrigin
     @PostMapping("/register/fullaccount")
     public ResponseEntity<HttpMessage> registerFullAccount(@RequestBody FFullAccount data) {
         HttpMessage message = HttpMessage.build();
@@ -113,7 +114,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 14, 11);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_CPF(), "CPF", 15, 11);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -277,8 +278,9 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
         }
     }
 
+    @CrossOrigin
     @PostMapping("/register/account")
-    public ResponseEntity<HttpMessage> registerAccount(@RequestBody FFullAccount data) {
+    public ResponseEntity<HttpMessage> registerAccount(@RequestBody FAccount data) {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
@@ -364,10 +366,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.CREATED;
-            message
-                .setCode(code)
-                .setMessage("Conta criada com sucesso")
-                .setResult(data.getAccount().getACC_CODE());
+            message.setCode(code).setMessage("Conta criada com sucesso").setResult(data.getAccount().getACC_CODE());
             return ResponseEntity.status(code).body(message);
 
         } catch (Exception e) {
