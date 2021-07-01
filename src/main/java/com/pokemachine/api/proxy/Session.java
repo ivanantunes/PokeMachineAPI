@@ -9,6 +9,7 @@ import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MCashMachine;
+import com.pokemachine.api.utils.SystemUtil;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
@@ -22,7 +23,7 @@ public class Session implements ProxyService {
     /**
      * List Sessions
      */
-    private List<FLogin> SESSIONS = new ArrayList<FLogin>();
+    private List<FLogin> lSession = new ArrayList<FLogin>();
 
     /**
      * Account Crud
@@ -66,52 +67,60 @@ public class Session implements ProxyService {
 
     @Override
     public boolean startSession(FLogin data) {
-
-        MAccount account = accountcrud.getDataByCode(data.getCODE());
         
-        if (account == null) {
-            return false; //Não foi encontrado nenhuma conta
-        }
-
-        char[] hashpassword = BCrypt.withDefaults().hashToChar(12, data.getPASSWORD().toCharArray());
-        BCrypt.Result result = BCrypt.verifyer().verify(account.getACC_PASSWORD().toCharArray(), hashpassword);
-
-        if (result.verified == false) {
-            return false; //Senhas não conferem
-        }
-
-        List<MCashMachine> lCashMachine = cashMachineCrud.getDataByID(data.getCASH_MACHINE_ID());
-
-        if (lCashMachine.size() <= 0) {
-            return false;
-        } else if (lCashMachine.size() >= 2) {
-            return false;
-        }
-
-        if (SESSIONS.contains(data)) {
-            if (SESSIONS.get(0).getCODE() == data.getCODE() && SESSIONS.get(0).getPASSWORD() == data.getPASSWORD()
-                    && SESSIONS.get(0).getCASH_MACHINE_ID() == data.getCASH_MACHINE_ID()) {
-                return true;
-            } else {
-                return false;
+        try {
+            MAccount account = accountcrud.getDataByCode(data.getCODE());
+        
+            if (account == null) {
+                return false; //Não foi encontrado nenhuma conta
             }
-        } else {
-            SESSIONS.add(data);
+
+            int salt = 12;
+            char[] charLoginPassword = data.getPASSWORD().toCharArray();
+            char[] charAccountPassword = account.getACC_PASSWORD().toCharArray(); 
+            char[] hashpassword = BCrypt.withDefaults().hashToChar(salt, charLoginPassword);
+            
+            if (BCrypt.verifyer().verify(charAccountPassword, hashpassword).verified == false) {
+                return false; //Senhas não conferem
+            }
+
+            data.setPASSWORD(hashpassword.toString());
+
+            List<MCashMachine> lCashMachine = cashMachineCrud.getDataByID(data.getCASH_MACHINE_ID());
+
+            if (lCashMachine.size() != 1 || lCashMachine.get(0).getCSM_ID() != data.getCASH_MACHINE_ID()) {
+                return false; // caixa eletronico nao existe
+            }
+
+            FLogin foundUser = null;
+            for (FLogin user: lSession) {
+
+                if (user.equals(data)) {
+                    foundUser = user;
+
+                    lCashMachine.get(0).setCSM_STATUS("EN");
+                    cashMachineCrud.update(lCashMachine.get(0));
+                    
+                    user.setCODE(data.getCODE())
+                        .setPASSWORD(data.getPASSWORD())
+                        .setCASH_MACHINE_ID(data.getCASH_MACHINE_ID())
+                        .setTOKEN(data.getTOKEN());
+                    
+                    return true;
+                }
+
+            }
+
+            if (foundUser == null) {    
+                lSession.add(data);                
+                return true;
+            }
+
+            return false;
+        } catch (Exception e) {
+            SystemUtil.log("Falha ao iniciar sessão.");
+            return false;
         }
-        // se exiter valide se os dados sao iguais
-        // se forem iguais passa
-        // se nao erro
-        // se nao existir passa pra gravar
-
-        // alteraçoes dentro dos caixas
-        // status
-
-        // salva nas sessoes
-
-        // retorna true
-
-        return true;
-
     }
 
     @Override

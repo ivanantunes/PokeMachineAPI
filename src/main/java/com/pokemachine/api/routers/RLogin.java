@@ -2,8 +2,6 @@ package com.pokemachine.api.routers;
 
 import java.util.List;
 
-import com.pokemachine.api.crud.AccountCrud;
-import com.pokemachine.api.crud.ClientCrud;
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
@@ -26,16 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 public class RLogin implements RouterCrud<MAccount> {
-
-    /**
-     * Crud Client
-     */
-    private ClientCrud clientCrud = ClientCrud.getInstance();
-
-    /**
-     * Crud Account
-     */
-    private AccountCrud accountCrud = AccountCrud.getInstance();
 
     @PostMapping("/login")
     public ResponseEntity<HttpMessage> login(@RequestBody FLogin data)  {
