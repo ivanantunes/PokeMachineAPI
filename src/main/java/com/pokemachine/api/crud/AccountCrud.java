@@ -35,6 +35,7 @@ public class AccountCrud implements DBCrud<MAccount> {
 
     /**
      * Get Instance
+     * 
      * @return Instance of Class
      */
     public static AccountCrud getInstance() {
@@ -198,7 +199,44 @@ public class AccountCrud implements DBCrud<MAccount> {
             return lAccount;
 
         } catch (Exception e) {
-            throw new Error(SystemUtil.log("Falha ao buscar Conta" + e.getMessage()));
+            throw new Error(SystemUtil.log("Falha ao buscar Conta " + e.getMessage()));
+        }
+    }
+
+    /**
+     * Get Account by CODE
+     * 
+     * @param code
+     * @return MAccount
+     */
+    public MAccount getDataByCode(String code) {
+
+        String sql = "SELECT * FROM ACCOUNT WHERE ACC_CODE = ?";
+
+        try {
+
+            PreparedStatement stmt = this.connection.prepareStatement(sql);
+            stmt.setString(1, code);
+            ResultSet result = stmt.executeQuery();
+
+            if (result.next()) {
+                MAccount account = MAccount.Build()
+                    .setACC_ID(result.getInt("ACC_ID"))
+                    .setACC_CLI_ID(result.getInt("ACC_CLI_ID"))
+                    .setACC_AGE_ID(result.getInt("ACC_AGE_ID"))
+                    .setACC_CODE(result.getString("ACC_CODE"))
+                    .setACC_PASSWORD(result.getString("ACC_PASSWORD"))
+                    .setACC_STATUS(result.getBoolean("ACC_STATUS"))
+                    .setACC_BALANCE(result.getFloat("ACC_BALANCE"))
+                    .setACC_TYPE(result.getString("ACC_TYPE"));
+                return account;
+
+            } else {
+                return null;
+            }
+
+        } catch (Exception e) {
+            throw new Error(SystemUtil.log("Falha ao buscar Conta por Número " + e.getMessage()));
         }
     }
 }

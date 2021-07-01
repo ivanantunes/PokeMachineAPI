@@ -62,27 +62,26 @@ public class Session implements ProxyService {
     @Override
     public boolean startSession(FLogin data) {
 
-        // validar a conta
-        List<MAccount> laccount = accountcrud.getAll(data.getCODE());
-
-        if (laccount.size() >= 2) {
-            return false;
-        } else if (laccount.size() <= 0) {
+        MAccount account = accountcrud.getDataByCode(data.getCODE());
+        
+        if (account == null) {
+            //Não foi encontrado nenhuma conta
             return false;
         }
 
         char[] hashpassword = BCrypt.withDefaults().hashToChar(12, data.getPASSWORD().toCharArray());
-        BCrypt.Result result = BCrypt.verifyer().verify(laccount.get(0).getACC_PASSWORD().toCharArray(), hashpassword);
+        BCrypt.Result result = BCrypt.verifyer().verify(account.getACC_PASSWORD().toCharArray(), hashpassword);
 
         if (result.verified == false) {
+            //Senhas não conferem
             return false;
         }
 
         List<MCashMachine> lCashMachine = cashMachineCrud.getDataByID(data.getCASH_MACHINE_ID());
 
-        if (lCashMachine.size() >= 2) {
+        if (lCashMachine.size() <= 0) {
             return false;
-        } else if (lCashMachine.size() <= 0) {
+        } else if (lCashMachine.size() >= 2) {
             return false;
         }
 
