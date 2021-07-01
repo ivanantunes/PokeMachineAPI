@@ -12,6 +12,11 @@ import com.pokemachine.api.models.MCashMachine;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
+/**
+ * Sesssion Class
+ * @author gbrextreme
+ * @author lucaszaia
+ */
 public class Session implements ProxyService {
 
     /**
@@ -65,16 +70,14 @@ public class Session implements ProxyService {
         MAccount account = accountcrud.getDataByCode(data.getCODE());
         
         if (account == null) {
-            //Não foi encontrado nenhuma conta
-            return false;
+            return false; //Não foi encontrado nenhuma conta
         }
 
         char[] hashpassword = BCrypt.withDefaults().hashToChar(12, data.getPASSWORD().toCharArray());
         BCrypt.Result result = BCrypt.verifyer().verify(account.getACC_PASSWORD().toCharArray(), hashpassword);
 
         if (result.verified == false) {
-            //Senhas não conferem
-            return false;
+            return false; //Senhas não conferem
         }
 
         List<MCashMachine> lCashMachine = cashMachineCrud.getDataByID(data.getCASH_MACHINE_ID());
@@ -113,13 +116,11 @@ public class Session implements ProxyService {
 
     @Override
     public boolean authSession(FLogin data) {
-        // TODO Auto-generated method stub
         return false;
     }
 
     @Override
     public boolean endSession(FLogin data) {
-        // TODO Auto-generated method stub
         return false;
     }
 
