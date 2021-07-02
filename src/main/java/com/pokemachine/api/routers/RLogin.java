@@ -2,6 +2,7 @@ package com.pokemachine.api.routers;
 
 import java.util.List;
 
+import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import at.favre.lib.crypto.bcrypt.BCrypt;
+
 /**
  * Create a login route that login data
  * @author gbrextreme
@@ -26,6 +29,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class RLogin implements RouterCrud<MAccount> {
     
+    /**
+     * Account Crud
+     */
+    private AccountCrud accountcrud = AccountCrud.getInstance();  
+
     @CrossOrigin
     @PostMapping("/login")
     public ResponseEntity<HttpMessage> login(@RequestBody FLogin data)  {
@@ -62,8 +70,26 @@ public class RLogin implements RouterCrud<MAccount> {
         }
 
         try {
+
+            MAccount account = accountcrud.getDataByCode(data.getCODE());
+        
+            if (account == null) {
+                code = HttpResponse.NOT_FOUND;
+                message.setCode(code).setMessage("Conta não encontrada.").setError("");
+                return ResponseEntity.status(code).body(message);//Não foi encontrado nenhuma conta
+            }
+
+            char[] charLoginPassword = data.getPASSWORD().toCharArray();
+            char[] charAccountPassword = account.getACC_PASSWORD().toCharArray(); 
+            char[] hashpassword = BCrypt.withDefaults().hashToChar(12, charLoginPassword);
             
-            if (ProxyUtil.Build().startSession(data)) {
+            if (BCrypt.verifyer().verify(charAccountPassword, hashpassword).verified == false) {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Senha não conferem.").setError("");
+                return ResponseEntity.status(code).body(message); //Senhas não conferem
+            } 
+
+            if (true) {
                 code = HttpResponse.OK;
                 message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
                 return ResponseEntity.status(code).body(message);

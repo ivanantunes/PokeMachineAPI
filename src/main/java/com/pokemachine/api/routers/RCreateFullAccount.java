@@ -215,14 +215,16 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(false);
 
             if (clientCrud.getAll(data.getClient().getCLI_RG()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG())
-                        .setError("");
+                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG()).setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
             if (clientCrud.getAll(data.getClient().getCLI_CPF()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF())
-                        .setError("");
+                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF()).setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
@@ -231,6 +233,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             if (clientID == 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Cliente Não Encontrado.").setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
@@ -243,6 +247,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             if (agencyCrud.getDataByID(data.getAccount().getACC_AGE_ID()).size() <= 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Agencia Não Encontrado.").setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
