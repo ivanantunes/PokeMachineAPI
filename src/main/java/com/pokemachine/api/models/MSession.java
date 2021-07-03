@@ -1,28 +1,28 @@
 package com.pokemachine.api.models;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class MSession {
     
     /**
      * Session Cash Machine ID
      */
-    private int SSI_CSM_ID;
+    private int SSI_CSM_ID = 0;
 
     /**
      * Session Account Code
      */
-    private String SSI_ACC_CODE;
+    private String SSI_ACC_CODE = "";
     
     /**
      * Session Token
      */
-    private String SSI_TOKEN;
+    private String SSI_TOKEN = "";
 
     /**
      * Session Date
      */
-    private Date SSI_DATE;
+    private LocalDateTime SSI_DATE;
 
     /**
      * Constructor
@@ -95,7 +95,7 @@ public class MSession {
      * GET SSI_DATE
      * @return SSI_DATE of Session Class
      */
-    public Date getSSI_DATE() {
+    public LocalDateTime getSSI_DATE() {
         return SSI_DATE;
     }
 
@@ -104,7 +104,7 @@ public class MSession {
      * @param SSI_DATE - Date of Session Class
      * @return Instance of Class
      */
-    public MSession setSSI_DATE(Date SSI_DATE) {
+    public MSession setSSI_DATE(LocalDateTime SSI_DATE) {
         this.SSI_DATE = SSI_DATE;
         return this;
     }
