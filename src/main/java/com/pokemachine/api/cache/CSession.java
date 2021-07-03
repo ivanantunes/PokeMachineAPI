@@ -18,13 +18,11 @@ public class CSession implements ProxyService{
 
     private List<MSession> memorySession = new ArrayList<MSession>();
 
-
-    public boolean newSession(MSession session) {
+    public boolean newSession (MSession session) {
 
         List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
 
         if (lMachine.size() >= 1) {
-
             if (lMachine.get(0).getCSM_STATUS().contains("EU") || lMachine.get(0).getCSM_STATUS().contains("IN")) {
                 return false;
             }
@@ -46,8 +44,23 @@ public class CSession implements ProxyService{
         return false;
     }
 
-    public boolean authSession() {
-        return false; // not implemented
+    public boolean authSession (MSession session) {
+
+        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+
+        if (lMachine.size() >= 1) {
+
+            MSession autSession = getSessionByCode(session.getSSI_ACC_CODE());
+
+            if (autSession != null) {
+
+                if (autSession.getSSI_TOKEN() == session.getSSI_TOKEN() ) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     public boolean endSession(MSession session) {
@@ -57,30 +70,17 @@ public class CSession implements ProxyService{
 
             try {
                 lMachine.get(0).setCSM_STATUS("AT");
+
                 crud.update(lMachine.get(0));
+                removeSession(session.getSSI_ACC_CODE());
 
-                MSession tSession = getSessionByCode(session.getSSI_ACC_CODE());
-
-
-
-            } catch(Exception e) {
+            } catch (Exception e) {
                 return false;
-            }
-
-            
+            }    
         }
 
         return false;
     } 
-
-    public MSession getSessionByToken(String token) {
-        for ( MSession uSession : memorySession ) {
-            if (uSession.getSSI_TOKEN().contains(token)) {
-                return uSession;
-            }
-        }
-        return null;
-    }
 
     public MSession getSessionByCode(String code) {
         for ( MSession uSession : memorySession ) {
@@ -109,8 +109,13 @@ public class CSession implements ProxyService{
         return false;
     }
 
-    public boolean removeSession(MSession session) {
+    public boolean removeSession(String code) {
+        for (MSession rSession : memorySession ){   
+            if (rSession.getSSI_ACC_CODE().contains(code)){
+                memorySession.remove(rSession);
+                return true;
+            }
+        }
         return false;
     } 
-
 }
