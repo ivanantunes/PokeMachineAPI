@@ -9,7 +9,6 @@ import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
-import com.pokemachine.api.utils.ProxyUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
