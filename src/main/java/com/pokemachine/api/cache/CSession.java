@@ -28,6 +28,33 @@ public class CSession implements ProxyService{
     private List<MSession> memorySession = new ArrayList<MSession>();
 
     /**
+     * Instance of Class
+     */
+    private static CSession instance;
+    
+    /**
+     * Constructor
+     */
+    private CSession() { }
+
+    /**
+     * Get instance method
+     */
+    public static CSession getInstance() {
+        if (instance == null) {
+            instance = new CSession();
+        } 
+        return instance;
+    }
+
+    /**
+     * Dentroy instance method
+     */
+    public void destroyInstance() {
+        instance = null;
+    }
+
+    /**
      * New Session
      * @param session - Value of MSession
      * @return boolean

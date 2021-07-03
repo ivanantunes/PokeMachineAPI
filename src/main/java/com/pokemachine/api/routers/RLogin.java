@@ -3,12 +3,16 @@ package com.pokemachine.api.routers;
 import java.util.List;
 
 import com.pokemachine.api.crud.AccountCrud;
+import com.pokemachine.api.crud.CashMachineCrud;
 import com.pokemachine.api.database.DBResult;
 import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.models.MCashMachine;
+import com.pokemachine.api.models.MSession;
+import com.pokemachine.api.utils.ProxySessionUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
@@ -31,7 +35,12 @@ public class RLogin implements RouterCrud<MAccount> {
     /**
      * Account Crud
      */
-    private AccountCrud accountcrud = AccountCrud.getInstance();  
+    private AccountCrud accountCrud = AccountCrud.getInstance();  
+
+    /**
+     * Cash Machine Crud
+     */
+    private CashMachineCrud cashMachineCrud = CashMachineCrud.getInstance();
 
     @CrossOrigin
     @PostMapping("/login")
@@ -70,12 +79,20 @@ public class RLogin implements RouterCrud<MAccount> {
 
         try {
 
-            MAccount account = accountcrud.getDataByCode(data.getCODE());
+            List<MCashMachine> lMachine = cashMachineCrud.getDataByID(data.getCASH_MACHINE_ID());
+
+            if (lMachine.size() != 1) {
+                code = HttpResponse.NOT_FOUND;
+                message.setCode(code).setMessage("Caixa não encontrado.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            MAccount account = accountCrud.getDataByCode(data.getCODE());
         
             if (account == null) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Conta não encontrada.").setError("");
-                return ResponseEntity.status(code).body(message);//Não foi encontrado nenhuma conta
+                return ResponseEntity.status(code).body(message);
             }
 
             char[] charLoginPassword = data.getPASSWORD().toCharArray();
@@ -88,7 +105,12 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message); //Senhas não conferem
             } 
 
-            if (true) {
+            MSession session = MSession.Build()
+                .setSSI_ACC_CODE(data.getCODE())
+                .setSSI_CSM_ID(data.getCASH_MACHINE_ID())
+                .setSSI_TOKEN(data.getTOKEN());
+
+            if (ProxySessionUtil.Build().newSession(session)) {
                 code = HttpResponse.OK;
                 message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
                 return ResponseEntity.status(code).body(message);
