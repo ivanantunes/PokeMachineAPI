@@ -88,7 +88,7 @@ public class FLogin {
      * @param CSM_ID - ID Cash MAachine of Form
      * @return Instance of Class
      */
-    public FLogin setCASH_MACHINE_ID(int CSM_ID) {
+    public FLogin setCSM_ID(int CSM_ID) {
         this.CSM_ID = CSM_ID;
         return this;
     }
