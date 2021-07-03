@@ -1,6 +1,5 @@
 package com.pokemachine.api.utils;
 
-import com.fasterxml.jackson.databind.jsontype.impl.StdTypeResolverBuilder;
 import com.pokemachine.api.cache.CSession;
 import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MSession;
