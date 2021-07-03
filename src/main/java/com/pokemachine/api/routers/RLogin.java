@@ -49,21 +49,21 @@ public class RLogin implements RouterCrud<MAccount> {
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
 
-        validator = StringValidator.isValidSting(data.getCODE(), "Codigo Conta", 15, 1);
+        validator = StringValidator.isValidSting(data.getACC_CODE(), "Codigo Conta", 15, 1);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getPASSWORD(), "Senha", 32, 6);
+        validator = StringValidator.isValidSting(data.getACC_PASSWORD(), "Senha", 32, 6);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);    
         }
 
-        validator = FloatValidator.isSmaller(data.getCASH_MACHINE_ID(), 0, "Caixa Eletronico");
+        validator = FloatValidator.isSmaller(data.getCSM_ID(), 0, "Caixa Eletronico");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -79,7 +79,7 @@ public class RLogin implements RouterCrud<MAccount> {
 
         try {
 
-            List<MCashMachine> lMachine = cashMachineCrud.getDataByID(data.getCASH_MACHINE_ID());
+            List<MCashMachine> lMachine = cashMachineCrud.getDataByID(data.getCSM_ID());
 
             if (lMachine.size() != 1) {
                 code = HttpResponse.NOT_FOUND;
@@ -87,7 +87,7 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            MAccount account = accountCrud.getDataByCode(data.getCODE());
+            MAccount account = accountCrud.getDataByCode(data.getACC_CODE());
         
             if (account == null) {
                 code = HttpResponse.NOT_FOUND;
@@ -95,7 +95,7 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
-            char[] charLoginPassword = data.getPASSWORD().toCharArray();
+            char[] charLoginPassword = data.getACC_PASSWORD().toCharArray();
             char[] charAccountPassword = account.getACC_PASSWORD().toCharArray(); 
             char[] hashpassword = BCrypt.withDefaults().hashToChar(12, charLoginPassword);
             
@@ -106,8 +106,8 @@ public class RLogin implements RouterCrud<MAccount> {
             } 
 
             MSession session = MSession.Build()
-                .setSSI_ACC_CODE(data.getCODE())
-                .setSSI_CSM_ID(data.getCASH_MACHINE_ID())
+                .setSSI_ACC_CODE(data.getACC_CODE())
+                .setSSI_CSM_ID(data.getCSM_ID())
                 .setSSI_TOKEN(data.getTOKEN());
 
             if (ProxySessionUtil.Build().newSession(session)) {
