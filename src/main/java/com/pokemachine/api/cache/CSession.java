@@ -3,8 +3,6 @@ package com.pokemachine.api.cache;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.websocket.Session;
-
 import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MSession;
