@@ -9,17 +9,17 @@ public class FLogin {
     /**
      * FLogin Code
      */
-    private String CODE;
+    private String ACC_CODE;
     
     /**
      * FLogin Password
      */
-    private String PASSWORD;
+    private String ACC_PASSWORD;
     
     /**
      * FLogin Cash Machine ID
      */
-    private int CASH_MACHINE_ID;
+    private int CSM_ID;
     
     /**
      * FLogin token
@@ -40,38 +40,38 @@ public class FLogin {
     }
 
     /**
-     * GET Code 
+     * GET Account Code 
      * @return Login Code
      */
-    public String getCODE() {
-        return CODE;
+    public String getACC_CODE() {
+        return ACC_CODE;
     }
 
     /**
-     * SET Code
-     * @param CODE - Code of Form
+     * SET Account Code
+     * @param ACC_CODE - Code of Form
      * @return Instance of Class
      */
-    public FLogin setCODE(String CODE) {
-        this.CODE = CODE;
+    public FLogin setACC_CODE(String ACC_CODE) {
+        this.ACC_CODE = ACC_CODE;
         return this;
     }
 
     /**
-     * GET Password
+     * GET ACC_PASSWORD
      * @return Login Password
      */
-    public String getPASSWORD() {
-        return PASSWORD;
+    public String getACC_PASSWORD() {
+        return ACC_PASSWORD;
     }
 
     /**
      * SET Password
-     * @param PASSWORD - Password of Form
+     * @param ACC_PASSWORD - Password of Form
      * @return Instance of Class
      */
-    public FLogin setPASSWORD(String PASSWORD) {
-        this.PASSWORD = PASSWORD;
+    public FLogin setACC_PASSWORD(String ACC_PASSWORD) {
+        this.ACC_PASSWORD = ACC_PASSWORD;
         return this;
     }
 
@@ -79,17 +79,17 @@ public class FLogin {
      * GET Cash Machine ID
      * @return Cash Machine ID
      */
-    public int getCASH_MACHINE_ID() {
-        return CASH_MACHINE_ID;
+    public int getCSM_ID() {
+        return CSM_ID;
     }
 
     /**
      * SET Cash Machine ID
-     * @param CASH_MACHINE_ID - ID Cash MAachine of Form
+     * @param CSM_ID - ID Cash MAachine of Form
      * @return Instance of Class
      */
-    public FLogin setCASH_MACHINE_ID(int CASH_MACHINE_ID) {
-        this.CASH_MACHINE_ID = CASH_MACHINE_ID;
+    public FLogin setCASH_MACHINE_ID(int CSM_ID) {
+        this.CSM_ID = CSM_ID;
         return this;
     }
 
