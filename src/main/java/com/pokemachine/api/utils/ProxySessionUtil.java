@@ -59,24 +59,11 @@ public class ProxySessionUtil implements ProxyService {
                 return false;
             }
 
-            // verificar se existe uma sessao
-            MSession mSession = CSession.getInstance().getSessionByCode(session.getSSI_ACC_CODE());
-
-            if (mSession != null) {
-                
-                
-                
-                
-
-            }  else {
-
-            }
 
         }
 
         /**
          * criando diversas sessoes para cada coisa
-         * flag enum para status do caixa
          * trocar para token
          * verificar code se existe sessao
          */
@@ -86,7 +73,13 @@ public class ProxySessionUtil implements ProxyService {
 
     @Override
     public boolean authSession(MSession session) {
-        return CSession.getInstance().authSession(session);
+        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+
+        if (lMachine.size() >= 1) {
+            return CSession.getInstance().authSession(session);
+        }
+
+        return false;
     }
 
     @Override

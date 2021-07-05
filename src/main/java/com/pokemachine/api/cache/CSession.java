@@ -68,18 +68,19 @@ public class CSession implements ProxyService{
      */
     public boolean authSession (MSession session) {
 
-        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+        MSession autSession = getSessionByToken(session.getSSI_TOKEN());
 
-        if (lMachine.size() >= 1) {
+        if (autSession != null) {
+            
+            //verificar hora e data
+            //diferença
 
-            MSession autSession = getSessionByCode(session.getSSI_ACC_CODE());
+            
 
-            if (autSession != null) {
+            // se passar a data
+            // atualizar data
+            // dar mais data
 
-                if (autSession.getSSI_TOKEN() == session.getSSI_TOKEN() ) {
-                    return true;
-                }
-            }
         }
 
         return false;
