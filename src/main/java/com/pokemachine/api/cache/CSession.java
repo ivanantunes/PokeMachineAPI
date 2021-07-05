@@ -71,7 +71,10 @@ public class CSession implements ProxyService{
         MSession autSession = getSessionByToken(session.getSSI_TOKEN());
 
         if (autSession != null) {
-            
+
+            if(session.getSSI_DATE(){
+
+            }
             //verificar hora e data
             //diferença
 
