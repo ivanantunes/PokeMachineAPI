@@ -96,10 +96,10 @@ public class RLogin implements RouterCrud<MAccount> {
             }
 
             char[] charLoginPassword = data.getACC_PASSWORD().toCharArray();
-            char[] charAccountPassword = account.getACC_PASSWORD().toCharArray(); 
-            char[] hashpassword = BCrypt.withDefaults().hashToChar(12, charLoginPassword);
+            String charAccountPassword = account.getACC_PASSWORD(); 
+           
             
-            if (BCrypt.verifyer().verify(charAccountPassword, hashpassword).verified == false) {
+            if (BCrypt.verifyer().verify(charLoginPassword, charAccountPassword).verified == false) {
                 code = HttpResponse.UNAUTHORIZED;
                 message.setCode(code).setMessage("Senha não conferem.").setError("");
                 return ResponseEntity.status(code).body(message); //Senhas não conferem
