@@ -110,7 +110,7 @@ public class RLogin implements RouterCrud<MAccount> {
                 .setSSI_CSM_ID(data.getCSM_ID())
                 .setSSI_TOKEN(data.getTOKEN());
 
-            if (ProxySessionUtil.Build().newSession(session)) {
+            if (ProxySessionUtil.getInstance().newSession(session)) {
                 code = HttpResponse.OK;
                 message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
                 return ResponseEntity.status(code).body(message);

@@ -18,11 +18,6 @@ import com.pokemachine.api.models.MSession;
 public class CSession implements ProxyService{
 
     /**
-     * Cash Machine Crud Instance
-     */
-    private CashMachineCrud crud = CashMachineCrud.getInstance();
-
-    /**
      * Session List
      */
     private List<MSession> memorySession = new ArrayList<MSession>();
@@ -60,29 +55,10 @@ public class CSession implements ProxyService{
      * @return boolean
      */
     public boolean newSession (MSession session) {
+        // atuliza se existe
+        // incluir
 
-        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
-
-        if (lMachine.size() >= 1) {
-            if (lMachine.get(0).getCSM_STATUS().contains("EU") || lMachine.get(0).getCSM_STATUS().contains("IN")) {
-                return false;
-            }
-
-            try {
-                lMachine.get(0).setCSM_STATUS("EU");
-                crud.update(lMachine.get(0));
-
-                if (updateSession(session)) {
-                    return true;
-                } else {
-                    insertSession(session);
-                }
-
-            } catch(Exception e) {
-                return false;
-            }
-        }
-        return false;
+        return insertSession(session);
     }
 
     /**
@@ -139,9 +115,23 @@ public class CSession implements ProxyService{
      * @return Obeject MSession
      */
     public MSession getSessionByCode(String code) {
-        for ( MSession uSession : memorySession ) {
-            if (uSession.getSSI_ACC_CODE().contains(code)) {
-                return uSession;
+        for ( MSession gSession : memorySession ) {
+            if (gSession.getSSI_ACC_CODE().contains(code)) {
+                return gSession;
+            }
+        }
+        return null;    
+    }
+
+    /**
+     * GET Session by Token
+     * @param token - Value of Validation token
+     * @return Obeject MSession
+     */
+    public MSession getSessionByToken(String token) {
+        for ( MSession gSession : memorySession ) {
+            if (gSession.getSSI_TOKEN().contains(token)) {
+                return gSession;
             }
         }
         return null;    

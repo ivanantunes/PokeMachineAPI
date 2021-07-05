@@ -265,14 +265,14 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             code = HttpResponse.OK;
             message
                 .setCode(code)
-                .setMessage("Conta Completa Cadastrada com Sucesso.")
+                .setMessage("Conta Cadastrada com Sucesso.")
                 .setResult(data.getAccount().getACC_CODE());
 
             return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
             try {
                 code = HttpResponse.BAD_REQUEST;
-                message.setCode(code).setMessage("Falha ao Cadastrado da Conta Completa").setError(e.getMessage());
+                message.setCode(code).setMessage("Falha ao Cadastrar Conta.").setError(e.getMessage());
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
