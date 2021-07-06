@@ -13,6 +13,7 @@ import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MCashMachine;
 import com.pokemachine.api.models.MSession;
 import com.pokemachine.api.utils.ProxySessionUtil;
+import com.pokemachine.api.utils.SystemUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
@@ -124,6 +125,8 @@ public class RLogin implements RouterCrud<MAccount> {
             try {
                 code = HttpResponse.BAD_REQUEST;
                 message.setCode(code).setMessage("Falha ao efetuar login.").setError(e.getMessage());
+                            
+                SystemUtil.log(e.getMessage()+e.getStackTrace());
                 return ResponseEntity.status(code).body(message);
             } catch (Exception err) {
                 code = HttpResponse.INTERNAL_SERVER_ERROR;

@@ -73,7 +73,19 @@ public class ProxySessionUtil implements ProxyService {
             List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
 
             if (lMachine.size() >= 1) {
-                CSession.getInstance().authSession(session);
+
+                Boolean authSession = CSession.getInstance().authSession(session);
+            
+                if (!authSession) {
+
+                    MCashMachine machine = MCashMachine.Build()
+                        .setCSM_ID(lMachine.get(0).getCSM_ID())
+                        .setCSM_NAME(lMachine.get(0).getCSM_NAME())
+                        .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
+                        .setCSM_STATUS("AT");
+
+                    crud.update(machine);
+                }
             }
         }
 

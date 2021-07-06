@@ -22,7 +22,7 @@ public class MSession {
     /**
      * Session Date
      */
-    private LocalDateTime SSI_DATE;
+    private LocalDateTime SSI_DATE = null;
 
     /**
      * Constructor

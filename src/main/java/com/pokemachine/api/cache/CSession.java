@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MSession;
+import com.pokemachine.api.utils.SystemUtil;
 
 /**
  * Cache Session
@@ -67,12 +68,14 @@ public class CSession implements ProxyService{
             updateSession(mSession);
 
         } else {
-            mSession.setSSI_DATE(LocalDateTime.now())
+
+            MSession sSession = MSession.Build()
+                .setSSI_DATE(LocalDateTime.now())
                 .setSSI_TOKEN(session.getSSI_TOKEN())
                 .setSSI_CSM_ID(session.getSSI_CSM_ID())
                 .setSSI_ACC_CODE(session.getSSI_ACC_CODE());
 
-            insertSession(mSession);
+            insertSession(sSession);
         }
 
         return true;
@@ -91,7 +94,8 @@ public class CSession implements ProxyService{
         if (autSession != null) {
 
             if (ChronoUnit.HOURS.between(autSession.getSSI_DATE(), LocalDateTime.now()) >= 2) {
-                return removeSessionByToken(autSession.getSSI_TOKEN());
+                removeSessionByToken(autSession.getSSI_TOKEN());
+                return false;
             }
             
             autSession.setSSI_DATE(LocalDateTime.now())
