@@ -5,13 +5,8 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.pokemachine.api.crud.CashMachineCrud;
-
 import com.pokemachine.api.interfaces.ProxyService;
-import com.pokemachine.api.models.MCashMachine;
 import com.pokemachine.api.models.MSession;
-
-import ch.qos.logback.core.db.dialect.MsSQLDialect;
 
 /**
  * Cache Session
