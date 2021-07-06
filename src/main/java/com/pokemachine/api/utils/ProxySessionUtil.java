@@ -59,7 +59,20 @@ public class ProxySessionUtil implements ProxyService {
                 return false;
             }
 
-            return CSession.getInstance().newSession(session);
+            boolean cacheSession = CSession.getInstance().newSession(session);
+
+            if (cacheSession) {
+
+                MCashMachine machine = MCashMachine.Build()
+                .setCSM_ID(lMachine.get(0).getCSM_ID())
+                .setCSM_NAME(lMachine.get(0).getCSM_NAME())
+                .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
+                .setCSM_STATUS("EU"); 
+                
+                crud.update(machine);
+
+                return true;
+            }
         }
 
         return false;
@@ -100,7 +113,18 @@ public class ProxySessionUtil implements ProxyService {
             List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
 
             if (lMachine.size() >= 1) {
-                CSession.getInstance().endSession(session);
+                
+            boolean cacheSession = CSession.getInstance().endSession(session);
+            
+                if (cacheSession) {
+                    MCashMachine machine = MCashMachine.Build()
+                            .setCSM_ID(lMachine.get(0).getCSM_ID())
+                            .setCSM_NAME(lMachine.get(0).getCSM_NAME())
+                            .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
+                            .setCSM_STATUS("AT");
+                            
+                    crud.update(machine);
+                }
             }
         }
         return false;
