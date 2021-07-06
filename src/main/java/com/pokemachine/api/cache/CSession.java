@@ -55,11 +55,24 @@ public class CSession implements ProxyService{
      * @return boolean
      */
     public boolean newSession (MSession session) {
-        // atuliza se existe
-        // incluir
+        // pegar conta e ver se tem alguma sessao
+        MSession mSession = getSessionByCode(session.getSSI_ACC_CODE());
 
-        return insertSession(session);
+        //verificar se o token 
+        if ((mSession != null) && (session.getSSI_TOKEN() != mSession.getSSI_TOKEN())) {
+
+            //atualziar o token
+            //atulizar a data
+
+        } else {
+
+            // atualizar a data
+
+        }
+
+        return true;
     }
+    
 
     /**
      * Authenticate Session
@@ -72,18 +85,18 @@ public class CSession implements ProxyService{
 
         if (autSession != null) {
 
-            if(session.getSSI_DATE(){
+            if ( ) {
 
             }
+
             //verificar hora e data
-            //diferença
-
+            // estar a data entre duas horas
+                // se nao remover a sessaon
+                // se sim continua e atualiza a data da sessao
             
+            // atulizar a sessao
 
-            // se passar a data
-            // atualizar data
-            // dar mais data
-
+            return true;
         }
 
         return false;
@@ -95,21 +108,8 @@ public class CSession implements ProxyService{
      * @return boolean
      */
     public boolean endSession(MSession session) {
-        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
-
-        if (lMachine.size() >= 1) {
-
-            try {
-                lMachine.get(0).setCSM_STATUS("AT");
-
-                crud.update(lMachine.get(0));
-                removeSession(session.getSSI_ACC_CODE());
-
-            } catch (Exception e) {
-                return false;
-            }    
-        }
-
+       
+        removeSession(session.getSSI_ACC_CODE());
         return false;
     } 
 

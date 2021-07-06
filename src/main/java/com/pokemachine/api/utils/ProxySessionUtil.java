@@ -59,32 +59,29 @@ public class ProxySessionUtil implements ProxyService {
                 return false;
             }
 
+            
+
 
         }
-
-        /**
-         * criando diversas sessoes para cada coisa
-         * trocar para token
-         * verificar code se existe sessao
-         */
 
         return false;
     }
 
     @Override
     public boolean authSession(MSession session) {
-        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+        //pegar caixa pelo token da sessao
 
-        if (lMachine.size() >= 1) {
-            return CSession.getInstance().authSession(session);
-        }
+        CSession.getInstance().authSession(session);
 
         return false;
     }
 
     @Override
     public boolean endSession(MSession session) {
-        return CSession.getInstance().endSession(session);
+        //pegar caixa pelo token da sessao
+
+    
+        return false;
     }
 
 }
