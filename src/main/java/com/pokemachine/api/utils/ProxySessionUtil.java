@@ -59,9 +59,7 @@ public class ProxySessionUtil implements ProxyService {
                 return false;
             }
 
-            
-
-
+            return CSession.getInstance().newSession(session);
         }
 
         return false;
@@ -69,18 +67,30 @@ public class ProxySessionUtil implements ProxyService {
 
     @Override
     public boolean authSession(MSession session) {
-        //pegar caixa pelo token da sessao
+        MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
-        CSession.getInstance().authSession(session);
+        if (mSession != null) {
+            List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+
+            if (lMachine.size() >= 1) {
+                CSession.getInstance().authSession(session);
+            }
+        }
 
         return false;
     }
 
     @Override
     public boolean endSession(MSession session) {
-        //pegar caixa pelo token da sessao
+        MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
-    
+        if (mSession != null) {
+            List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+
+            if (lMachine.size() >= 1) {
+                CSession.getInstance().endSession(session);
+            }
+        }
         return false;
     }
 

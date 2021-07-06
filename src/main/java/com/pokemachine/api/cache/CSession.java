@@ -65,16 +65,19 @@ public class CSession implements ProxyService{
         if ((mSession != null) && (session.getSSI_TOKEN() != mSession.getSSI_TOKEN())) {
 
             mSession.setSSI_ACC_CODE(session.getSSI_ACC_CODE())
-            .setSSI_CSM_ID(session.getSSI_CSM_ID())
-            .setSSI_TOKEN(session.getSSI_TOKEN())
-            .setSSI_DATE(LocalDateTime.now());    
+                .setSSI_CSM_ID(session.getSSI_CSM_ID())
+                .setSSI_TOKEN(session.getSSI_TOKEN())
+                .setSSI_DATE(LocalDateTime.now());    
             
             updateSession(mSession);
 
         } else {
-            mSession.setSSI_DATE(LocalDateTime.now());
-            updateSession(mSession);
+            mSession.setSSI_DATE(LocalDateTime.now())
+                .setSSI_TOKEN(session.getSSI_TOKEN())
+                .setSSI_CSM_ID(session.getSSI_CSM_ID())
+                .setSSI_ACC_CODE(session.getSSI_ACC_CODE());
 
+            insertSession(mSession);
         }
 
         return true;
@@ -93,7 +96,7 @@ public class CSession implements ProxyService{
         if (autSession != null) {
 
             if (ChronoUnit.HOURS.between(autSession.getSSI_DATE(), LocalDateTime.now()) >= 2) {
-                return removeSession(autSession.getSSI_ACC_CODE());
+                return removeSessionByToken(autSession.getSSI_TOKEN());
             }
             
             autSession.setSSI_DATE(LocalDateTime.now())
@@ -114,9 +117,7 @@ public class CSession implements ProxyService{
      * @return boolean
      */
     public boolean endSession(MSession session) {
-       
-        removeSession(session.getSSI_ACC_CODE());
-        return false;
+        return removeSessionByToken(session.getSSI_TOKEN());
     } 
 
     /**
@@ -148,17 +149,6 @@ public class CSession implements ProxyService{
     }
 
     /**
-     * Insert Session
-     * @param session - Value of MSession
-     * @return boolean
-     */
-    public boolean insertSession(MSession session) {
-        session.setSSI_DATE(LocalDateTime.now());
-        memorySession.add(session);
-        return true;
-    } 
-
-    /**
      * Update Session
      * @param session - Value of MSession
      * @return boolean
@@ -166,9 +156,10 @@ public class CSession implements ProxyService{
     public boolean updateSession(MSession session) {
         for ( MSession uSession : memorySession ) {
             if (uSession.getSSI_ACC_CODE().contains(session.getSSI_ACC_CODE())) {
-                uSession.setSSI_CSM_ID(session.getSSI_CSM_ID());
-                uSession.setSSI_TOKEN(session.getSSI_TOKEN());
-                uSession.setSSI_DATE(LocalDateTime.now());
+                uSession.setSSI_CSM_ID(session.getSSI_CSM_ID())
+                    .setSSI_TOKEN(session.getSSI_TOKEN())
+                    .setSSI_DATE(session.getSSI_DATE());
+
                 return true;
             }
         }    
@@ -180,13 +171,25 @@ public class CSession implements ProxyService{
      * @param code - Value of SSI_ACC_CODE
      * @return boolean
      */
-    public boolean removeSession(String code) {
+    public boolean removeSessionByToken(String token) {
         for (MSession rSession : memorySession ){   
-            if (rSession.getSSI_ACC_CODE().contains(code)){
+            if (rSession.getSSI_TOKEN().contains(token)){
                 memorySession.remove(rSession);
                 return true;
             }
         }
         return false;
     } 
+
+    /**
+     * Insert Session
+     * @param session - Value of MSession
+     * @return boolean
+     */
+    public boolean insertSession(MSession session) {
+        session.setSSI_DATE(LocalDateTime.now());
+        memorySession.add(session);
+        return true;
+    }
+
 }
