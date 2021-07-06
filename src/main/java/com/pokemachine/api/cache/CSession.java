@@ -1,6 +1,7 @@
 package com.pokemachine.api.cache;
 
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,17 +86,16 @@ public class CSession implements ProxyService{
 
         if (autSession != null) {
 
-            if ( ) {
-
+            if (ChronoUnit.HOURS.between(autSession.getSSI_DATE(), LocalDateTime.now()) >= 2) {
+                return removeSession(autSession.getSSI_ACC_CODE());
             }
-
-            //verificar hora e data
-            // estar a data entre duas horas
-                // se nao remover a sessaon
-                // se sim continua e atualiza a data da sessao
             
-            // atulizar a sessao
+            autSession.setSSI_DATE(LocalDateTime.now())
+                .setSSI_TOKEN(session.getSSI_TOKEN())
+                .setSSI_CSM_ID(session.getSSI_CSM_ID())
+                .setSSI_ACC_CODE(session.getSSI_ACC_CODE());
 
+            updateSession(autSession);
             return true;
         }
 
