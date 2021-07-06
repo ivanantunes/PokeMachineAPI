@@ -11,6 +11,8 @@ import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MCashMachine;
 import com.pokemachine.api.models.MSession;
 
+import ch.qos.logback.core.db.dialect.MsSQLDialect;
+
 /**
  * Cache Session
  * @author gbrextreme
@@ -62,12 +64,16 @@ public class CSession implements ProxyService{
         //verificar se o token 
         if ((mSession != null) && (session.getSSI_TOKEN() != mSession.getSSI_TOKEN())) {
 
-            //atualziar o token
-            //atulizar a data
+            mSession.setSSI_ACC_CODE(session.getSSI_ACC_CODE())
+            .setSSI_CSM_ID(session.getSSI_CSM_ID())
+            .setSSI_TOKEN(session.getSSI_TOKEN())
+            .setSSI_DATE(LocalDateTime.now());    
+            
+            updateSession(mSession);
 
         } else {
-
-            // atualizar a data
+            mSession.setSSI_DATE(LocalDateTime.now());
+            updateSession(mSession);
 
         }
 
