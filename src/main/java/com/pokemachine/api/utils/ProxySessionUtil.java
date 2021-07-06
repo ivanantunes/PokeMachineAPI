@@ -22,7 +22,7 @@ public class ProxySessionUtil implements ProxyService {
     /**
      * Instance of Class
      */
-    private static ProxySessionUtil instance;
+    private static ProxySessionUtil instance = null;
 
     /**
      * Constructor
@@ -114,7 +114,7 @@ public class ProxySessionUtil implements ProxyService {
 
             if (lMachine.size() >= 1) {
                 
-            boolean cacheSession = CSession.getInstance().endSession(session);
+                boolean cacheSession = CSession.getInstance().endSession(session);
             
                 if (cacheSession) {
                     MCashMachine machine = MCashMachine.Build()

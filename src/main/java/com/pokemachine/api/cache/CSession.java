@@ -24,7 +24,7 @@ public class CSession implements ProxyService{
     /**
      * Instance of Class
      */
-    private static CSession instance;
+    private static CSession instance = null;
     
     /**
      * Constructor
