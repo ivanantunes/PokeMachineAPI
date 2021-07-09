@@ -7,7 +7,6 @@ import java.util.List;
 
 import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MSession;
-import com.pokemachine.api.utils.SystemUtil;
 
 /**
  * Cache Session

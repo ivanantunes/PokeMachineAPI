@@ -87,6 +87,12 @@ public class RLogin implements RouterCrud<MAccount> {
                 message.setCode(code).setMessage("Caixa não encontrado.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
+            
+            if (lMachine.get(0).getCSM_STATUS() == "EU" || lMachine.get(0).getCSM_STATUS() == "IN") {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Caixa em Uso, Tente Outro.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
 
             MAccount account = accountCrud.getDataByCode(data.getACC_CODE());
         
@@ -96,9 +102,14 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
 
+            if (!account.getACC_STATUS()) {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Conta Inativa.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
             char[] charLoginPassword = data.getACC_PASSWORD().toCharArray();
             String charAccountPassword = account.getACC_PASSWORD(); 
-           
             
             if (BCrypt.verifyer().verify(charLoginPassword, charAccountPassword).verified == false) {
                 code = HttpResponse.UNAUTHORIZED;
