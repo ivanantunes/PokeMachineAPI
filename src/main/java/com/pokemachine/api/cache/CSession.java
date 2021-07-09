@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.pokemachine.api.interfaces.ProxyService;
+import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MSession;
 import com.pokemachine.api.utils.SystemUtil;
 
@@ -108,6 +109,20 @@ public class CSession implements ProxyService{
         }
 
         return false;
+    }
+
+    @Override
+    public MAccount getAccountByToken(MSession session) {
+        try {
+            MSession mSession = getSessionByToken(session.getSSI_TOKEN());
+            MAccount account = MAccount.Build()
+                .setACC_CODE(mSession.getSSI_ACC_CODE()); 
+
+            return account;
+        } catch (Exception e) {
+            SystemUtil.log("Error while trying to get Account by Token " + e.getMessage());
+        }
+        return null;
     }
 
     /**

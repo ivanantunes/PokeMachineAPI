@@ -1,5 +1,6 @@
 package com.pokemachine.api.interfaces;
 
+import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MSession;
 
 /**
@@ -28,5 +29,12 @@ public interface ProxyService {
      * @return Value of Method
      */
     public boolean endSession(MSession session);
+
+    /**
+     * Get Account by Token
+     * @param session - Model of Session
+     * @return MAccount value
+     */
+    public MAccount getAccountByToken(MSession session); 
 
 }

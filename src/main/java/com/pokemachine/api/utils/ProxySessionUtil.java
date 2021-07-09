@@ -3,8 +3,10 @@ package com.pokemachine.api.utils;
 import java.util.List;
 
 import com.pokemachine.api.cache.CSession;
+import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.CashMachineCrud;
 import com.pokemachine.api.interfaces.ProxyService;
+import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MCashMachine;
 import com.pokemachine.api.models.MSession;
 
@@ -17,7 +19,12 @@ public class ProxySessionUtil implements ProxyService {
     /**
      * Cash Machine Crud Instance
      */
-    private CashMachineCrud crud = CashMachineCrud.getInstance();
+    private CashMachineCrud cashMachinecrud = CashMachineCrud.getInstance();
+
+    /**
+     * Account Crud
+     */
+    private AccountCrud accountCrud = AccountCrud.getInstance();
 
     /**
      * Instance of Class
@@ -51,7 +58,7 @@ public class ProxySessionUtil implements ProxyService {
     @Override
     public boolean newSession(MSession session) {
 
-        List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+        List<MCashMachine> lMachine = cashMachinecrud.getDataByID(session.getSSI_CSM_ID());
 
         if (lMachine.size() >= 1) {
 
@@ -69,7 +76,7 @@ public class ProxySessionUtil implements ProxyService {
                 .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
                 .setCSM_STATUS("EU"); 
                 
-                crud.update(machine);
+                cashMachinecrud.update(machine);
 
                 return true;
             }
@@ -83,7 +90,7 @@ public class ProxySessionUtil implements ProxyService {
         MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
         if (mSession != null) {
-            List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+            List<MCashMachine> lMachine = cashMachinecrud.getDataByID(session.getSSI_CSM_ID());
 
             if (lMachine.size() >= 1) {
 
@@ -97,7 +104,7 @@ public class ProxySessionUtil implements ProxyService {
                         .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
                         .setCSM_STATUS("AT");
 
-                    crud.update(machine);
+                    cashMachinecrud.update(machine);
                 }
             }
         }
@@ -110,7 +117,7 @@ public class ProxySessionUtil implements ProxyService {
         MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
         if (mSession != null) {
-            List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+            List<MCashMachine> lMachine = cashMachinecrud.getDataByID(session.getSSI_CSM_ID());
 
             if (lMachine.size() >= 1) {
                 
@@ -123,11 +130,29 @@ public class ProxySessionUtil implements ProxyService {
                             .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
                             .setCSM_STATUS("AT");
                             
-                    crud.update(machine);
+                    cashMachinecrud.update(machine);
                 }
             }
         }
         return false;
     }
+
+    @Override
+    public MAccount getAccountByToken(MSession session) {        
+        MAccount mAccount = CSession.getInstance().getAccountByToken(session);
+
+        if (mAccount != null) {
+            try{
+                return accountCrud.getDataByCode(mAccount.getACC_CODE());
+            } catch (Exception e) {
+                SystemUtil.log("Proxy error while trying to get Account by Token " + e.getMessage());
+            }
+        }
+
+        return null;
+    }
+
+    
+    
 
 }
