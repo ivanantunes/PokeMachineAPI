@@ -10,16 +10,6 @@ import com.pokemachine.api.models.MClientTelephone;
  * @author gbrextreme
  */
 public class FFullAccount {
-    
-
-    /**
-     * Constructor
-     */
-    private FFullAccount () { }
-
-    public static FFullAccount Build() {
-        return new FFullAccount();
-    }
 
     /**
      * Client Model
@@ -41,6 +31,18 @@ public class FFullAccount {
      */
     private MAccount account;
 
+    /**
+     * Constructor
+     */
+    private FFullAccount () { }
+
+    /**
+     * Build Class
+     * @return New instance fo Class FFullAccount
+     */
+    public static FFullAccount Build() {
+        return new FFullAccount();
+    }
 
     /**
      * GET Client 

@@ -40,25 +40,21 @@ public class RCashMachine implements RouterCrud<MCashMachine> {
 
     @Override
     public ResponseEntity<HttpMessage> register(MCashMachine data) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ResponseEntity<HttpMessage> edit(MCashMachine data) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ResponseEntity<HttpMessage> delete(int id) {
-        // TODO Auto-generated method stub
         return null;
     }
 
     @Override
     public ResponseEntity<DBResult<MCashMachine>> getFilteredData(int limit, String search) {
-        // TODO Auto-generated method stub
         return null;
     }
 

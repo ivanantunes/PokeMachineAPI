@@ -2,20 +2,23 @@ package com.pokemachine.api.routers;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSessionListener;
-
 import com.pokemachine.api.crud.AccountCrud;
-import com.pokemachine.api.crud.ClientCrud;
+import com.pokemachine.api.crud.CashMachineCrud;
 import com.pokemachine.api.database.DBResult;
+import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.models.MCashMachine;
+import com.pokemachine.api.models.MSession;
+import com.pokemachine.api.utils.ProxySessionUtil;
+import com.pokemachine.api.utils.SystemUtil;
+import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
 
-import org.springframework.boot.autoconfigure.web.reactive.WebFluxProperties.Session;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,26 +26,26 @@ import org.springframework.web.bind.annotation.RestController;
 import at.favre.lib.crypto.bcrypt.BCrypt;
 
 /**
- * Create a full account route that cotains all data
- * 
+ * Create a login route that login data
  * @author gbrextreme
  * @author LucasZaia
  */
 @RestController
 public class RLogin implements RouterCrud<MAccount> {
+    
+    /**
+     * Account Crud
+     */
+    private AccountCrud accountCrud = AccountCrud.getInstance();  
 
     /**
-     * Crud Client
+     * Cash Machine Crud
      */
-    private ClientCrud clientCrud = ClientCrud.getInstance();
+    private CashMachineCrud cashMachineCrud = CashMachineCrud.getInstance();
 
-    /**
-     * Crud Account
-     */
-    private AccountCrud accountCrud = AccountCrud.getInstance();
-
+    @CrossOrigin
     @PostMapping("/login")
-    public ResponseEntity<HttpMessage> login(@RequestBody MAccount data) {
+    public ResponseEntity<HttpMessage> login(@RequestBody FLogin data)  {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
@@ -58,44 +61,72 @@ public class RLogin implements RouterCrud<MAccount> {
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);    
+        }
+
+        validator = FloatValidator.isSmaller(data.getCSM_ID(), 0, "Caixa Eletronico");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);    
+        }
+
+        validator = StringValidator.isEmpty(data.getTOKEN(), "Token");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
             return ResponseEntity.status(code).body(message);
         }
 
         try {
-            List<MAccount> lAccounts = accountCrud.getAll(data.getACC_CODE());
 
-            if (lAccounts.size() >= 2) {
-                code = HttpResponse.INTERNAL_SERVER_ERROR;
-                message.setCode(code).setMessage("Mais de uma conta foi encontrada com o numero informado.")
-                        .setError("");
-                return ResponseEntity.status(code).body(message);
-            } else if (lAccounts.size() <= 0) {
+            List<MCashMachine> lMachine = cashMachineCrud.getDataByID(data.getCSM_ID());
+
+            if (lMachine.size() != 1) {
                 code = HttpResponse.NOT_FOUND;
-                message.setCode(code).setMessage("Nenhuma Conta encontrado com o numero informado.").setError("");
+                message.setCode(code).setMessage("Caixa não encontrado.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
-            String hashPassword = BCrypt.withDefaults().hashToString(12, data.getACC_PASSWORD().toCharArray());
+            MAccount account = accountCrud.getDataByCode(data.getACC_CODE());
+        
+            if (account == null) {
+                code = HttpResponse.NOT_FOUND;
+                message.setCode(code).setMessage("Conta não encontrada.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
 
-            if (hashPassword != lAccounts.get(0).getACC_PASSWORD()) {
+            char[] charLoginPassword = data.getACC_PASSWORD().toCharArray();
+            String charAccountPassword = account.getACC_PASSWORD(); 
+           
+            
+            if (BCrypt.verifyer().verify(charLoginPassword, charAccountPassword).verified == false) {
                 code = HttpResponse.UNAUTHORIZED;
-                message.setCode(code).setMessage("Senha invalida ou não coincidem.").setError("");
+                message.setCode(code).setMessage("Senha não conferem.").setError("");
+                return ResponseEntity.status(code).body(message); //Senhas não conferem
+            } 
+
+            MSession session = MSession.Build()
+                .setSSI_ACC_CODE(data.getACC_CODE())
+                .setSSI_CSM_ID(data.getCSM_ID())
+                .setSSI_TOKEN(data.getTOKEN());
+
+            if (ProxySessionUtil.getInstance().newSession(session)) {
+                code = HttpResponse.OK;
+                message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
+                return ResponseEntity.status(code).body(message);
+            } else {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Falha ao efetuar login.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
-
-            // TODO: Mater sessão
-
-            HttpHeaders headers = new HttpHeaders();
-            headers.add("session-value", "");
-
-            code = HttpResponse.OK;
-            message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
-            return ResponseEntity.status(code).headers(headers).body(message);
 
         } catch (Exception e) {
             try {
                 code = HttpResponse.BAD_REQUEST;
                 message.setCode(code).setMessage("Falha ao efetuar login.").setError(e.getMessage());
+                            
+                SystemUtil.log(e.getMessage()+e.getStackTrace());
                 return ResponseEntity.status(code).body(message);
             } catch (Exception err) {
                 code = HttpResponse.INTERNAL_SERVER_ERROR;

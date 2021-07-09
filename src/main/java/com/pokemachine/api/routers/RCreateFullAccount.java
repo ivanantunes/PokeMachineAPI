@@ -215,14 +215,16 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(false);
 
             if (clientCrud.getAll(data.getClient().getCLI_RG()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG())
-                        .setError("");
+                message.setCode(code).setMessage("Cliente Já Cadastrado com RG " + data.getClient().getCLI_RG()).setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
             if (clientCrud.getAll(data.getClient().getCLI_CPF()).size() != 0) {
-                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF())
-                        .setError("");
+                message.setCode(code).setMessage("Cliente Já Cadastrado com CPF " + data.getClient().getCLI_CPF()).setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
@@ -231,6 +233,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             if (clientID == 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Cliente Não Encontrado.").setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
@@ -243,6 +247,8 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             if (agencyCrud.getDataByID(data.getAccount().getACC_AGE_ID()).size() <= 0) {
                 code = HttpResponse.NOT_FOUND;
                 message.setCode(code).setMessage("Agencia Não Encontrado.").setError("");
+                connection.rollback();
+                connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
             }
 
@@ -257,14 +263,16 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
             connection.setAutoCommit(true);
 
             code = HttpResponse.OK;
-            message.setCode(code).setMessage("Conta Completa Cadastrado com Sucesso.")
-                    .setResult(data.getAccount().getACC_CODE());
+            message
+                .setCode(code)
+                .setMessage("Conta Cadastrada com Sucesso.")
+                .setResult(data.getAccount().getACC_CODE());
 
             return ResponseEntity.status(code).body(message);
         } catch (Exception e) {
             try {
                 code = HttpResponse.BAD_REQUEST;
-                message.setCode(code).setMessage("Falha ao Cadastrado da Conta Completa").setError(e.getMessage());
+                message.setCode(code).setMessage("Falha ao Cadastrar Conta.").setError(e.getMessage());
                 connection.rollback();
                 connection.setAutoCommit(true);
                 return ResponseEntity.status(code).body(message);
