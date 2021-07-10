@@ -4,16 +4,13 @@ import java.util.List;
 
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.CashMachineCrud;
-import com.pokemachine.api.crud.ClientCrud;
 import com.pokemachine.api.database.DBResult;
-import com.pokemachine.api.forms.FAccount;
 import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MCashMachine;
-import com.pokemachine.api.models.MClient;
 import com.pokemachine.api.models.MSession;
 import com.pokemachine.api.utils.ProxySessionUtil;
 import com.pokemachine.api.utils.SystemUtil;
@@ -126,13 +123,8 @@ public class RLogin implements RouterCrud<MAccount> {
                 .setSSI_TOKEN(data.getTOKEN());
 
             if (ProxySessionUtil.getInstance().newSession(session)) {
-
-                MClient loginClient = ClientCrud.getInstance().getDataByID(account.getACC_CLI_ID()).get(0);
-
-                FAccount returnLogin = FAccount.Build().setAccount(account).setClient(loginClient);
-
                 code = HttpResponse.OK;
-                message.setCode(code).setMessage("Login efetuado com sucesso.").setError("").setResult(returnLogin);
+                message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
                 return ResponseEntity.status(code).body(message);
             } else {
                 code = HttpResponse.UNAUTHORIZED;

@@ -1,5 +1,6 @@
 package com.pokemachine.api.poke_machine_api;
 
+import com.pokemachine.api.routers.RAccount;
 import com.pokemachine.api.routers.RCard;
 import com.pokemachine.api.routers.RCashMachine;
 import com.pokemachine.api.routers.RClient;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackageClasses = RLogin.class)
 @ComponentScan(basePackageClasses = RCard.class)
 @ComponentScan(basePackageClasses = RCashMachine.class)
+@ComponentScan(basePackageClasses = RAccount.class)
 public class PokeMachineApiApplication {
 
 	public static void main(String[] args) {

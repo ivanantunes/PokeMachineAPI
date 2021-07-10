@@ -110,11 +110,11 @@ public class ProxySessionUtil implements ProxyService {
         MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
         if (mSession != null) {
-            List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+            List<MCashMachine> lMachine = crud.getDataByID(mSession.getSSI_CSM_ID());
 
-            if (lMachine.size() >= 1) {
+            if (lMachine.size() == 1) {
 
-                Boolean authSession = CSession.getInstance().authSession(session);
+                boolean authSession = CSession.getInstance().authSession(mSession);
             
                 if (!authSession) {
 
@@ -125,7 +125,11 @@ public class ProxySessionUtil implements ProxyService {
                         .setCSM_STATUS("AT");
 
                     crud.update(machine);
+
+                    return false;
                 }
+
+                return true;
             }
         }
 
@@ -137,11 +141,11 @@ public class ProxySessionUtil implements ProxyService {
         MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
         if (mSession != null) {
-            List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
+            List<MCashMachine> lMachine = crud.getDataByID(mSession.getSSI_CSM_ID());
 
-            if (lMachine.size() >= 1) {
+            if (lMachine.size() == 1) {
                 
-                boolean cacheSession = CSession.getInstance().endSession(session);
+                boolean cacheSession = CSession.getInstance().endSession(mSession);
             
                 if (cacheSession) {
                     MCashMachine machine = MCashMachine.Build()
@@ -151,9 +155,12 @@ public class ProxySessionUtil implements ProxyService {
                             .setCSM_STATUS("AT");
                             
                     crud.update(machine);
+                    
+                    return true;
                 }
             }
         }
+    
         return false;
     }
 
