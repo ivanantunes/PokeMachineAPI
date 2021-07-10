@@ -53,26 +53,53 @@ public class ProxySessionUtil implements ProxyService {
 
         List<MCashMachine> lMachine = crud.getDataByID(session.getSSI_CSM_ID());
 
-        if (lMachine.size() >= 1) {
+        if (lMachine.size() == 1) {
 
-            if (lMachine.get(0).getCSM_STATUS().contains("EU") || lMachine.get(0).getCSM_STATUS().contains("IN")) {
-                return false;
-            }
+            CSession cSession = CSession.getInstance();
 
-            boolean cacheSession = CSession.getInstance().newSession(session);
+            MSession isSession = cSession.getSessionByCode(session.getSSI_ACC_CODE());
 
-            if (cacheSession) {
+            if (isSession != null) {
 
-                MCashMachine machine = MCashMachine.Build()
+                MCashMachine currentMachine = MCashMachine.Build()
                 .setCSM_ID(lMachine.get(0).getCSM_ID())
                 .setCSM_NAME(lMachine.get(0).getCSM_NAME())
                 .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
-                .setCSM_STATUS("EU"); 
-                
-                crud.update(machine);
+                .setCSM_STATUS("EU");
 
-                return true;
+                if (isSession.getSSI_CSM_ID() != session.getSSI_CSM_ID()) {
+                    List<MCashMachine> lMachineOld = crud.getDataByID(isSession.getSSI_CSM_ID());
+
+                    MCashMachine oldMachine = MCashMachine.Build()
+                    .setCSM_ID(lMachineOld.get(0).getCSM_ID())
+                    .setCSM_NAME(lMachineOld.get(0).getCSM_NAME())
+                    .setCSM_AVAILABLE_VALUE(lMachineOld.get(0).getCSM_AVAILABLE_VALUE())
+                    .setCSM_STATUS("AT");
+    
+                    cSession.removeSessionByToken(isSession.getSSI_TOKEN());
+                    crud.update(oldMachine);
+                }
+                crud.update(currentMachine);
+
+                return cSession.newSession(session);
+            } else {
+                boolean cacheSession = CSession.getInstance().newSession(session);
+
+                if (cacheSession) {
+    
+                    MCashMachine machine = MCashMachine.Build()
+                    .setCSM_ID(lMachine.get(0).getCSM_ID())
+                    .setCSM_NAME(lMachine.get(0).getCSM_NAME())
+                    .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
+                    .setCSM_STATUS("EU"); 
+                    
+                    crud.update(machine);
+    
+                    return true;
+                }
+        
             }
+
         }
 
         return false;

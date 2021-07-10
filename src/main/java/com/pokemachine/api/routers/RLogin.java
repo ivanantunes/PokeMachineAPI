@@ -4,13 +4,16 @@ import java.util.List;
 
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.CashMachineCrud;
+import com.pokemachine.api.crud.ClientCrud;
 import com.pokemachine.api.database.DBResult;
+import com.pokemachine.api.forms.FAccount;
 import com.pokemachine.api.forms.FLogin;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
 import com.pokemachine.api.models.MCashMachine;
+import com.pokemachine.api.models.MClient;
 import com.pokemachine.api.models.MSession;
 import com.pokemachine.api.utils.ProxySessionUtil;
 import com.pokemachine.api.utils.SystemUtil;
@@ -88,9 +91,9 @@ public class RLogin implements RouterCrud<MAccount> {
                 return ResponseEntity.status(code).body(message);
             }
             
-            if (lMachine.get(0).getCSM_STATUS() == "EU" || lMachine.get(0).getCSM_STATUS() == "IN") {
+            if (lMachine.get(0).getCSM_STATUS().contains("EU") || lMachine.get(0).getCSM_STATUS().contains("IN")) {
                 code = HttpResponse.UNAUTHORIZED;
-                message.setCode(code).setMessage("Caixa em Uso, Tente Outro.").setError("");
+                message.setCode(code).setMessage("Caixa em Uso ou Inativo, Tente Outro.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
@@ -123,8 +126,13 @@ public class RLogin implements RouterCrud<MAccount> {
                 .setSSI_TOKEN(data.getTOKEN());
 
             if (ProxySessionUtil.getInstance().newSession(session)) {
+
+                MClient loginClient = ClientCrud.getInstance().getDataByID(account.getACC_CLI_ID()).get(0);
+
+                FAccount returnLogin = FAccount.Build().setAccount(account).setClient(loginClient);
+
                 code = HttpResponse.OK;
-                message.setCode(code).setMessage("Login efetuado com sucesso.").setError("");
+                message.setCode(code).setMessage("Login efetuado com sucesso.").setError("").setResult(returnLogin);
                 return ResponseEntity.status(code).body(message);
             } else {
                 code = HttpResponse.UNAUTHORIZED;
