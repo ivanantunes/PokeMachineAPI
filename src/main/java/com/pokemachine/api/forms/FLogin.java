@@ -33,7 +33,7 @@ public class FLogin {
 
     /**
      * Build Class
-     * @return New instance fo Class FLogin
+     * @return New instance for Class FLogin
      */
     public static FLogin Build() {
         return new FLogin();
