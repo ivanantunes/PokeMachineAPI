@@ -19,6 +19,7 @@ import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -149,13 +150,13 @@ public class RLogin implements RouterCrud<MAccount> {
     }
 
     @CrossOrigin
-    @PostMapping("/logout")
-    public ResponseEntity<HttpMessage> logout (@RequestHeader String session_token)  {
+    @GetMapping("/logout")
+    public ResponseEntity<HttpMessage> logout (@RequestHeader String token)  {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
 
-        validator = StringValidator.isEmpty(session_token, "Token de Sessão");
+        validator = StringValidator.isEmpty(token, "Token de Sessão");
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -165,7 +166,7 @@ public class RLogin implements RouterCrud<MAccount> {
         try {
             
             ProxySessionUtil.getInstance().endSession(
-                MSession.Build().setSSI_TOKEN(session_token)
+                MSession.Build().setSSI_TOKEN(token)
             );
 
             code = HttpResponse.OK;
