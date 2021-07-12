@@ -150,7 +150,7 @@ public class RLogin implements RouterCrud<MAccount> {
 
     @CrossOrigin
     @PostMapping("/logout")
-    public ResponseEntity<HttpMessage> logout(@RequestHeader String session_token)  {
+    public ResponseEntity<HttpMessage> logout (@RequestHeader String session_token)  {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
