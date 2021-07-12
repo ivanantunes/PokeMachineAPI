@@ -10,6 +10,8 @@ import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
 import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MSession;
+import com.pokemachine.api.models.MTransferHistory;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @author LucasZaia
  */
 @RestController
-public class RTransactions implements RouterCrud<MSession> {
+public class RTransactions  {
     
     /**
      * Cash Machine Crud
@@ -50,43 +52,6 @@ public class RTransactions implements RouterCrud<MSession> {
         }
         
         return null;
-
     }
-    
-
-    @Override
-    public ResponseEntity<HttpMessage> register(MSession data) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<HttpMessage> edit(MSession data) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public ResponseEntity<HttpMessage> delete(int id) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public ResponseEntity<List<MSession>> getAll(String search) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-
-    @Override
-    public ResponseEntity<DBResult<MSession>> getFilteredData(int limit, String search) {
-        // TODO Auto-generated method stub
-        return null;
-    } 
-
-
 
 }
