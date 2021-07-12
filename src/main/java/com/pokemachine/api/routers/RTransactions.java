@@ -54,4 +54,15 @@ public class RTransactions  {
         return null;
     }
 
+    @CrossOrigin
+    @PostMapping("/transfer/credit")
+    public ResponseEntity<HttpMessage> credit() {
+        HttpMessage message = HttpMessage.build();
+        int code = HttpResponse.UNAUTHORIZED;
+        String validator = "";
+        
+        
+        return null;
+    }
+
 }

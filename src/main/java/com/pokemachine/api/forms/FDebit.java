@@ -7,25 +7,25 @@ package com.pokemachine.api.forms;
  */
 public class FDebit {
 
-/**
-* FLogin Value
-*/
-private float ACC_VALUE;
+    /**
+    * FLogin Value
+    */
+    private float ACC_VALUE;
 
-/**
- * Construct
- */
-private FDebit(){}
+    /**
+     * Construct
+     */
+    private FDebit(){}
 
-/**
- * Build Class
- * @return new instance for Class FDebit
- */
-public static FDebit Build () {
-    return new FDebit();
-}
+    /**
+     * Build Class
+     * @return new instance for Class FDebit
+     */
+    public static FDebit Build () {
+        return new FDebit();    
+    }
 
-/**
+    /**
      * GET ACC_VALUE 
      * @return Account value
      */
@@ -42,7 +42,5 @@ public static FDebit Build () {
         this.ACC_VALUE = ACC_VALUE;
         return this;
     }
-
-
-    
+        
 }
