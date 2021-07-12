@@ -92,23 +92,23 @@ public class ProxySessionUtil implements ProxyService {
         if (mSession != null) {
             List<MCashMachine> lMachine = cashMachinecrud.getDataByID(session.getSSI_CSM_ID());
 
-            if (lMachine.size() >= 1) {
+            if (lMachine.size() == 1) {
 
-                Boolean authSession = CSession.getInstance().authSession(session);
-            
-                if (!authSession) {
-
-                    MCashMachine machine = MCashMachine.Build()
-                        .setCSM_ID(lMachine.get(0).getCSM_ID())
-                        .setCSM_NAME(lMachine.get(0).getCSM_NAME())
-                        .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
-                        .setCSM_STATUS("AT");
-
-                    cashMachinecrud.update(machine);
+                if (CSession.getInstance().authSession(session)) {
+                    return true;
                 }
+
+                MCashMachine machine = MCashMachine.Build()
+                    .setCSM_ID(lMachine.get(0).getCSM_ID())
+                    .setCSM_NAME(lMachine.get(0).getCSM_NAME())
+                    .setCSM_AVAILABLE_VALUE(lMachine.get(0).getCSM_AVAILABLE_VALUE())
+                    .setCSM_STATUS("AT");
+
+                cashMachinecrud.update(machine);
+                return false;
             }
         }
-
+        
         return false;
     }
 

@@ -89,13 +89,49 @@ public class RTransactions  {
 
     @CrossOrigin
     @PostMapping("/transfer/credit")
-    public ResponseEntity<HttpMessage> credit() {
+    public ResponseEntity<HttpMessage> credit(@RequestBody float value, @RequestHeader String token
+    ) {
         HttpMessage message = HttpMessage.build();
         int code = HttpResponse.UNAUTHORIZED;
         String validator = "";
         
-        
-        return null;
+        validator = StringValidator.isEmpty(token, "Token de Sessão");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        validator = FloatValidator.isSmaller(value, 0, "Valor de Transferência");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        try{
+            MSession session = MSession.Build().setSSI_TOKEN(token);
+
+            if (!ProxySessionUtil.getInstance().authSession(session)) {
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Sessão invalida ou expirada.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+            
+            MAccount account = ProxySessionUtil.getInstance()
+                .getAccountByToken(session);
+
+            account.setACC_BALANCE(account.getACC_BALANCE() + value);
+            accountCrud.update(account);
+
+            code = HttpResponse.OK;
+            message.setCode(code).setMessage("Valor de R$ " + value + " credita com sucesso.").setError("");
+            return ResponseEntity.status(code).body(message);
+        }catch (Exception e) {
+           code = HttpResponse.INTERNAL_SERVER_ERROR;
+           message.setCode(code).setMessage("Erro interno no servidor").setError(e.getMessage());
+           return ResponseEntity.status(code).body(message);      
+        }
     }
 
 }
