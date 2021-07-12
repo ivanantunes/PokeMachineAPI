@@ -75,7 +75,8 @@ public class RTransactions  {
 
             MAccount account = ProxySessionUtil.getInstance().getAccountByToken(session);
             
-            account.getACC_BALANCE();
+            account.setACC_BALANCE(account.getACC_BALANCE() - value);
+            accountCrud.update(account);
             
         }catch (Exception e) {
            code = HttpResponse.INTERNAL_SERVER_ERROR;
