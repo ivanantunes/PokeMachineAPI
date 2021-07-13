@@ -164,14 +164,24 @@ public class RLogin implements RouterCrud<MAccount> {
         }
 
         try {
-            
-            ProxySessionUtil.getInstance().endSession(
-                MSession.Build().setSSI_TOKEN(token)
-            );
+            MSession session = MSession.Build().setSSI_TOKEN(token);
 
-            code = HttpResponse.OK;
-            message.setCode(code).setMessage("Sessão finalizada com sucesso.").setError("");
-            return ResponseEntity.status(code).body(message);   
+            if (!ProxySessionUtil.getInstance().authSession(session)){
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Sessão inexistente ou invalida.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            if (ProxySessionUtil.getInstance().endSession(session)) {
+                code = HttpResponse.OK;
+                message.setCode(code).setMessage("Sessão finalizada com sucesso.").setError("");
+                return ResponseEntity.status(code).body(message); 
+            }
+
+            code = HttpResponse.INTERNAL_SERVER_ERROR;
+            message.setCode(code).setMessage("Sessão não pode ser finalizada devido a algum erro.").setError("");
+            return ResponseEntity.status(code).body(message);
+              
         } catch (Exception e) {
             code = HttpResponse.INTERNAL_SERVER_ERROR;
             message.setCode(code)

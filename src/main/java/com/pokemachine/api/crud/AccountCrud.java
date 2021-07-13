@@ -100,8 +100,9 @@ public class AccountCrud implements DBCrud<MAccount> {
     @Override
     public MAccount update(MAccount value) {
 
-        String sql = "UPDATE ACCOUNT SET ACC_AGE_ID = ?, ACC_CLI_ID = ?, ACC_CODE = ?, ACC_PASSWORD"
-                + "ACC_STATUS = ?, ACC_BALANCE = ?, ACC_TYPE = ? WHERE ACC_ID = ?";
+        String sql = "UPDATE ACCOUNT SET ACC_AGE_ID = ?, ACC_CLI_ID = ?, "+ 
+                     "ACC_CODE = ?, ACC_PASSWORD = ?, ACC_STATUS = ?, " + 
+                     "ACC_BALANCE = ?, ACC_TYPE = ? WHERE ACC_ID = ? ";
 
         try {
 

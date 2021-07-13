@@ -114,14 +114,14 @@ public class ProxySessionUtil implements ProxyService {
 
     @Override
     public boolean authSession(MSession session) {
-        MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
+        MSession cacheSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
-        if (mSession != null) {
-            List<MCashMachine> lMachine = cashMachinecrud.getDataByID(session.getSSI_CSM_ID());
+        if (cacheSession != null) {
+            List<MCashMachine> lMachine = cashMachinecrud.getDataByID(cacheSession.getSSI_CSM_ID());
 
             if (lMachine.size() == 1) {
 
-                if (CSession.getInstance().authSession(session)) {
+                if (CSession.getInstance().authSession(cacheSession)) {
                     return true;
                 }
 
@@ -141,16 +141,16 @@ public class ProxySessionUtil implements ProxyService {
 
     @Override
     public boolean endSession(MSession session) {
-        MSession mSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
+        MSession cacheSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
 
-        if (mSession != null) {
-            List<MCashMachine> lMachine = cashMachinecrud.getDataByID(session.getSSI_CSM_ID());
+        if (cacheSession != null) {
+            List<MCashMachine> lMachine = cashMachinecrud.getDataByID(cacheSession.getSSI_CSM_ID());
 
             if (lMachine.size() == 1) {
                 
-                boolean cacheSession = CSession.getInstance().endSession(mSession);
+                boolean endSession = CSession.getInstance().endSession(cacheSession);
             
-                if (cacheSession) {
+                if (endSession) {
                     MCashMachine machine = MCashMachine.Build()
                             .setCSM_ID(lMachine.get(0).getCSM_ID())
                             .setCSM_NAME(lMachine.get(0).getCSM_NAME())
@@ -158,6 +158,7 @@ public class ProxySessionUtil implements ProxyService {
                             .setCSM_STATUS("AT");
                             
                     cashMachinecrud.update(machine);
+                    return true;
                 }
             }
         }
