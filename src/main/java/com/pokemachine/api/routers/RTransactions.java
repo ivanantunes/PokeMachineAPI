@@ -66,6 +66,8 @@ public class RTransactions  {
         }
         
         try{
+            
+            connection.setAutoCommit(false);
 
             if (!ProxySessionUtil.getInstance().authSession(token)){
                 code = HttpResponse.UNAUTHORIZED;
@@ -73,26 +75,56 @@ public class RTransactions  {
                 return ResponseEntity.status(code).body(message);
             }
 
+            MCashMachine cashMachine = ProxySessionUtil.getInstance().getCashMachineByToken(token);
+
+            if(cashMachine.getCSM_AVAILABLE_VALUE() < value){
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Caixa Eletrônico Está sem dinheiro suficiente").setError("");
+                return ResponseEntity.status(code).body(message);
+            } 
+
             MAccount account = ProxySessionUtil.getInstance().getAccountByToken(token);
+
+            if(account.getACC_BALANCE() < value){
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Conta não possui saldo suficiente para completar operação").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
             
             account.setACC_BALANCE(account.getACC_BALANCE() - value);
             accountCrud.update(account);
 
+            cashMachine.setCSM_AVAILABLE_VALUE(cashMachine.getCSM_AVAILABLE_VALUE() - value);
+            cashMachineCrud.update(cashMachine);
+
+            connection.commit();
+            connection.setAutoCommit(true);
+
             if(account.getACC_BALANCE() <= 0){
                 account.setACC_STATUS(false);
                 accountCrud.update(account);
-                message.setCode(code).setMessage("Conta Desativada por estar com saldo zerado");
+                String msgDebit = "Valor R$ " + value + " Debitado";
+                String msgErr = "sua conta foi desativada por estar com saldo zerado";
+                message.setCode(code).setMessage(msgDebit).setError(msgErr);
                 return ResponseEntity.status(code).body(message);
-            }
+            } 
 
             code = HttpResponse.OK;
             message.setCode(code).setMessage("Valor R$ " + value + " foi Debitado com sucesso");
             return ResponseEntity.status(code).body(message);
             
         }catch (Exception e) {
-           code = HttpResponse.INTERNAL_SERVER_ERROR;
-           message.setCode(code).setMessage("Erro interno no servidor").setError(e.getMessage());
-           return ResponseEntity.status(code).body(message);      
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                code = HttpResponse.BAD_REQUEST;
+                message.setCode(code).setMessage("Falha ao efetuar transação de Débito.").setError(e.getMessage());
+                return ResponseEntity.status(code).body(message);
+            } catch (Exception err) {
+                code = HttpResponse.INTERNAL_SERVER_ERROR;
+                message.setCode(code).setMessage("Erro Interno do Servidor.").setError(err.getMessage());
+                return ResponseEntity.status(code).body(message);
+            }
         }
     }
 
