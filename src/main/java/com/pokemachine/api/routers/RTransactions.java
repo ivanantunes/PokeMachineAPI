@@ -64,10 +64,10 @@ public class RTransactions  {
         }
         
         try{
-            
+
             MSession session = MSession.Build().setSSI_TOKEN(token);
 
-            if (ProxySessionUtil.getInstance().authSession(session)){
+            if (!ProxySessionUtil.getInstance().authSession(session)){
                 code = HttpResponse.UNAUTHORIZED;
                 message.setCode(code).setMessage("Sessão Inválida ou Expirada").setError("");
                 return ResponseEntity.status(code).body(message);
@@ -77,14 +77,23 @@ public class RTransactions  {
             
             account.setACC_BALANCE(account.getACC_BALANCE() - value);
             accountCrud.update(account);
+
+            if(account.getACC_BALANCE() <= 0){
+                account.setACC_STATUS(false);
+                accountCrud.update(account);
+                message.setCode(code).setMessage("Conta Desativada por estar com saldo zerado");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            code = HttpResponse.OK;
+            message.setCode(code).setMessage("Valor R$ " + value + " foi Debitado com sucesso");
+            return ResponseEntity.status(code).body(message);
             
         }catch (Exception e) {
            code = HttpResponse.INTERNAL_SERVER_ERROR;
            message.setCode(code).setMessage("Erro interno no servidor").setError(e.getMessage());
            return ResponseEntity.status(code).body(message);      
         }
-        
-        return null;
     }
 
     @CrossOrigin
