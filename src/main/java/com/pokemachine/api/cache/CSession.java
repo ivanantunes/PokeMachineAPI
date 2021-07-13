@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.pokemachine.api.interfaces.ProxyService;
 import com.pokemachine.api.models.MAccount;
+import com.pokemachine.api.models.MCashMachine;
 import com.pokemachine.api.models.MSession;
 import com.pokemachine.api.utils.SystemUtil;
 
@@ -49,11 +50,7 @@ public class CSession implements ProxyService{
         instance = null;
     }
 
-    /**
-     * New Session
-     * @param session - Value of MSession
-     * @return boolean
-     */
+    @Override
     public boolean newSession (MSession session) {
         // pegar conta e ver se tem alguma sessao
         MSession mSession = getSessionByCode(session.getSSI_ACC_CODE());
@@ -83,28 +80,20 @@ public class CSession implements ProxyService{
     }
     
 
-    /**
-     * Authenticate Session
-     * @param session - Value of MSession
-     * @return boolean
-     */
-    public boolean authSession (MSession session) {
+    @Override
+    public boolean authSession (String token) {
 
-        MSession autSession = getSessionByToken(session.getSSI_TOKEN());
+        MSession cacheSession = this.getSessionByToken(token);
 
-        if (autSession != null) {
+        if (cacheSession != null) {
 
-            if (ChronoUnit.HOURS.between(autSession.getSSI_DATE(), LocalDateTime.now()) >= 2) {
-                removeSessionByToken(autSession.getSSI_TOKEN());
+            if (ChronoUnit.HOURS.between(cacheSession.getSSI_DATE(), LocalDateTime.now()) >= 2) {
+                removeSessionByToken(cacheSession.getSSI_TOKEN());
                 return false;
             }
             
-            autSession.setSSI_DATE(LocalDateTime.now())
-                .setSSI_TOKEN(session.getSSI_TOKEN())
-                .setSSI_CSM_ID(session.getSSI_CSM_ID())
-                .setSSI_ACC_CODE(session.getSSI_ACC_CODE());
-
-            updateSession(autSession);
+            cacheSession.setSSI_DATE(LocalDateTime.now());
+            updateSession(cacheSession);
             return true;
         }
 
@@ -112,27 +101,31 @@ public class CSession implements ProxyService{
     }
 
     @Override
-    public MAccount getAccountByToken(MSession session) {
-        try {
-            MSession mSession = getSessionByToken(session.getSSI_TOKEN());
-            MAccount account = MAccount.Build()
-                .setACC_CODE(mSession.getSSI_ACC_CODE()); 
+    public boolean endSession(String token) {
+        return removeSessionByToken(token);
+    } 
 
-            return account;
+    @Override
+    public MAccount getAccountByToken(String token) {
+        try {
+            MSession cacheSession = getSessionByToken(token);  
+            return MAccount.Build().setACC_CODE(cacheSession.getSSI_ACC_CODE());
         } catch (Exception e) {
             SystemUtil.log("Error while trying to get Account by Token " + e.getMessage());
         }
         return null;
     }
 
-    /**
-     * End Session
-     * @param session - Value of MSession
-     * @return boolean
-     */
-    public boolean endSession(MSession session) {
-        return removeSessionByToken(session.getSSI_TOKEN());
-    } 
+    @Override
+    public MCashMachine getCashMachineByToken(String token) {
+        try {
+            MSession cachSession = getSessionByToken(token);
+            return MCashMachine.Build().setCSM_ID(cachSession.getSSI_CSM_ID());
+        } catch (Exception e) {
+            SystemUtil.log("Error while trying to get Cash Machine by Token " + e.getMessage());   
+        } 
+        return null;
+    }
 
     /**
      * GET Session by Code

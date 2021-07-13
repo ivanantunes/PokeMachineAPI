@@ -1,17 +1,14 @@
 package com.pokemachine.api.routers;
 
-import java.util.List;
+import java.sql.Connection;
 
 import com.pokemachine.api.crud.AccountCrud;
 import com.pokemachine.api.crud.CashMachineCrud;
-import com.pokemachine.api.database.DBResult;
-
+import com.pokemachine.api.database.DBService;
 import com.pokemachine.api.http.HttpMessage;
 import com.pokemachine.api.http.HttpResponse;
-import com.pokemachine.api.interfaces.RouterCrud;
 import com.pokemachine.api.models.MAccount;
-import com.pokemachine.api.models.MSession;
-import com.pokemachine.api.models.MTransferHistory;
+import com.pokemachine.api.models.MCashMachine;
 import com.pokemachine.api.utils.ProxySessionUtil;
 import com.pokemachine.api.validators.FloatValidator;
 import com.pokemachine.api.validators.StringValidator;
@@ -41,6 +38,11 @@ public class RTransactions  {
      */
     private AccountCrud accountCrud = AccountCrud.getInstance();
 
+    /**
+     * Connection Database
+     */
+    private Connection connection = DBService.getInstance().getConnection();
+
     @CrossOrigin
     @PostMapping("/transfer/debit")
     public ResponseEntity<HttpMessage> debit(@RequestBody float value, 
@@ -65,15 +67,13 @@ public class RTransactions  {
         
         try{
 
-            MSession session = MSession.Build().setSSI_TOKEN(token);
-
-            if (!ProxySessionUtil.getInstance().authSession(session)){
+            if (!ProxySessionUtil.getInstance().authSession(token)){
                 code = HttpResponse.UNAUTHORIZED;
                 message.setCode(code).setMessage("Sessão Inválida ou Expirada").setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
-            MAccount account = ProxySessionUtil.getInstance().getAccountByToken(session);
+            MAccount account = ProxySessionUtil.getInstance().getAccountByToken(token);
             
             account.setACC_BALANCE(account.getACC_BALANCE() - value);
             accountCrud.update(account);
@@ -119,27 +119,49 @@ public class RTransactions  {
         }
 
         try{
-            MSession session = MSession.Build().setSSI_TOKEN(token);
+            connection.setAutoCommit(false);
 
-            if (!ProxySessionUtil.getInstance().authSession(session)) {
+            if (!ProxySessionUtil.getInstance().authSession(token)) {
                 code = HttpResponse.UNAUTHORIZED;
                 message.setCode(code).setMessage("Sessão invalida ou expirada.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
             
-            MAccount account = ProxySessionUtil.getInstance()
-                .getAccountByToken(session);
+            MAccount account = ProxySessionUtil.getInstance().getAccountByToken(token);
+
+            if (!account.getACC_STATUS()) {
+                float balance = account.getACC_BALANCE() + value;
+                if (balance > 0) {
+                    account.setACC_STATUS(true);
+                }
+            }
 
             account.setACC_BALANCE(account.getACC_BALANCE() + value);
             accountCrud.update(account);
+
+            MCashMachine cashMachine = ProxySessionUtil.getInstance().getCashMachineByToken(token);
+
+            cashMachine.setCSM_AVAILABLE_VALUE(cashMachine.getCSM_AVAILABLE_VALUE() + value);
+            cashMachineCrud.update(cashMachine);
+
+            connection.commit();
+            connection.setAutoCommit(true);
 
             code = HttpResponse.OK;
             message.setCode(code).setMessage("Valor de R$ " + value + " credita com sucesso.").setError("");
             return ResponseEntity.status(code).body(message);
         }catch (Exception e) {
-           code = HttpResponse.INTERNAL_SERVER_ERROR;
-           message.setCode(code).setMessage("Erro interno no servidor").setError(e.getMessage());
-           return ResponseEntity.status(code).body(message);      
+            try {
+                connection.rollback();
+                connection.setAutoCommit(true);
+                code = HttpResponse.BAD_REQUEST;
+                message.setCode(code).setMessage("Falha ao efetuar transação de credito.").setError(e.getMessage());
+                return ResponseEntity.status(code).body(message);
+            } catch (Exception err) {
+                code = HttpResponse.INTERNAL_SERVER_ERROR;
+                message.setCode(code).setMessage("Erro Interno do Servidor.").setError(err.getMessage());
+                return ResponseEntity.status(code).body(message);
+            }
         }
     }
 

@@ -164,15 +164,15 @@ public class RLogin implements RouterCrud<MAccount> {
         }
 
         try {
-            MSession session = MSession.Build().setSSI_TOKEN(token);
+            
 
-            if (!ProxySessionUtil.getInstance().authSession(session)){
+            if (!ProxySessionUtil.getInstance().authSession(token)){
                 code = HttpResponse.UNAUTHORIZED;
                 message.setCode(code).setMessage("Sessão inexistente ou invalida.").setError("");
                 return ResponseEntity.status(code).body(message);
             }
 
-            if (ProxySessionUtil.getInstance().endSession(session)) {
+            if (ProxySessionUtil.getInstance().endSession(token)) {
                 code = HttpResponse.OK;
                 message.setCode(code).setMessage("Sessão finalizada com sucesso.").setError("");
                 return ResponseEntity.status(code).body(message); 

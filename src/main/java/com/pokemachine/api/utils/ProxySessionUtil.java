@@ -101,27 +101,23 @@ public class ProxySessionUtil implements ProxyService {
                     .setCSM_STATUS("EU"); 
                     
                     cashMachinecrud.update(machine);
-    
                     return true;
                 }
-        
             }
-
         }
-
         return false;
     }
 
     @Override
-    public boolean authSession(MSession session) {
-        MSession cacheSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
+    public boolean authSession(String token) {
+        MSession cacheSession = CSession.getInstance().getSessionByToken(token); 
 
         if (cacheSession != null) {
             List<MCashMachine> lMachine = cashMachinecrud.getDataByID(cacheSession.getSSI_CSM_ID());
 
             if (lMachine.size() == 1) {
 
-                if (CSession.getInstance().authSession(cacheSession)) {
+                if (CSession.getInstance().authSession(cacheSession.getSSI_TOKEN())) {
                     return true;
                 }
 
@@ -140,15 +136,15 @@ public class ProxySessionUtil implements ProxyService {
     }
 
     @Override
-    public boolean endSession(MSession session) {
-        MSession cacheSession = CSession.getInstance().getSessionByToken(session.getSSI_TOKEN()); //pegar caixa pelo token da sessao
+    public boolean endSession(String token) {
+        MSession cacheSession = CSession.getInstance().getSessionByToken(token); //pegar caixa pelo token da sessao
 
         if (cacheSession != null) {
             List<MCashMachine> lMachine = cashMachinecrud.getDataByID(cacheSession.getSSI_CSM_ID());
 
             if (lMachine.size() == 1) {
                 
-                boolean endSession = CSession.getInstance().endSession(cacheSession);
+                boolean endSession = CSession.getInstance().endSession(cacheSession.getSSI_TOKEN());
             
                 if (endSession) {
                     MCashMachine machine = MCashMachine.Build()
@@ -167,17 +163,40 @@ public class ProxySessionUtil implements ProxyService {
     }
 
     @Override
-    public MAccount getAccountByToken(MSession session) {        
-        MAccount mAccount = CSession.getInstance().getAccountByToken(session);
+    public MAccount getAccountByToken(String token) {        
+        MAccount account = CSession.getInstance().getAccountByToken(token);
 
-        if (mAccount != null) {
+        if (account != null) {
             try{
-                return accountCrud.getDataByCode(mAccount.getACC_CODE());
+                return accountCrud.getDataByCode(account.getACC_CODE());
             } catch (Exception e) {
                 SystemUtil.log("Proxy error while trying to get Account by Token " + e.getMessage());
             }
         }
 
+        return null;
+    }
+
+    @Override
+    public MCashMachine getCashMachineByToken(String token) {
+        MCashMachine cashMachine = CSession.getInstance().getCashMachineByToken(token);
+
+        if (cashMachine != null) {
+            try {
+                List<MCashMachine> lCashMachines = cashMachinecrud.getDataByID(cashMachine.getCSM_ID());
+
+                if (lCashMachines.size() == 1) {
+                    cashMachine.setCSM_ID(lCashMachines.get(0).getCSM_ID())
+                        .setCSM_NAME(lCashMachines.get(0).getCSM_NAME())
+                        .setCSM_AVAILABLE_VALUE(lCashMachines.get(0).getCSM_AVAILABLE_VALUE())
+                        .setCSM_STATUS(lCashMachines.get(0).getCSM_STATUS());
+                    return cashMachine;
+                }
+
+            } catch (Exception e) {
+                SystemUtil.log("Proxy error while trying to get Cash Machine by Token " + e.getMessage());
+            }
+        } 
         return null;
     }
 
