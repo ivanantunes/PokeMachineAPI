@@ -41,7 +41,7 @@ public class RAccount {
 
         
 
-        if (!ProxySessionUtil.getInstance().authSession(MSession.Build().setSSI_TOKEN(token))) {
+        if (!ProxySessionUtil.getInstance().authSession(token)) {
             message.setCode(code).setMessage("Usuário Não Está Autenticado.").setError("");
             return ResponseEntity.status(code).body(message);
         }
