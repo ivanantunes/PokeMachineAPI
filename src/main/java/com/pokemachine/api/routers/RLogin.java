@@ -19,8 +19,10 @@ import com.pokemachine.api.validators.StringValidator;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import at.favre.lib.crypto.bcrypt.BCrypt;
@@ -144,6 +146,48 @@ public class RLogin implements RouterCrud<MAccount> {
                 message.setCode(code).setMessage("Erro Interno do Servidor.").setError(err.getMessage());
                 return ResponseEntity.status(code).body(message);
             }
+        }
+    }
+
+    @CrossOrigin
+    @GetMapping("/logout")
+    public ResponseEntity<HttpMessage> logout (@RequestHeader String token)  {
+        HttpMessage message = HttpMessage.build();
+        int code = HttpResponse.UNAUTHORIZED;
+        String validator = "";
+
+        validator = StringValidator.isEmpty(token, "Token de Sessão");
+
+        if (!validator.isEmpty()) {
+            message.setCode(code).setMessage(validator).setError("");
+            return ResponseEntity.status(code).body(message);
+        }
+
+        try {
+            
+
+            if (!ProxySessionUtil.getInstance().authSession(token)){
+                code = HttpResponse.UNAUTHORIZED;
+                message.setCode(code).setMessage("Sessão inexistente ou invalida.").setError("");
+                return ResponseEntity.status(code).body(message);
+            }
+
+            if (ProxySessionUtil.getInstance().endSession(token)) {
+                code = HttpResponse.OK;
+                message.setCode(code).setMessage("Sessão finalizada com sucesso.").setError("");
+                return ResponseEntity.status(code).body(message); 
+            }
+
+            code = HttpResponse.INTERNAL_SERVER_ERROR;
+            message.setCode(code).setMessage("Sessão não pode ser finalizada devido a algum erro.").setError("");
+            return ResponseEntity.status(code).body(message);
+              
+        } catch (Exception e) {
+            code = HttpResponse.INTERNAL_SERVER_ERROR;
+            message.setCode(code)
+                .setMessage(SystemUtil.log("Erro ao tentar finalizar sessão."))
+                .setError(e.getMessage());
+            return ResponseEntity.status(code).body(message);    
         }
     }
 
