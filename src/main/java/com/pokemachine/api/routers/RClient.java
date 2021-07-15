@@ -57,7 +57,7 @@ public class RClient implements RouterCrud<MClient> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getCLI_BIRTHDAY(), "Data de Aniversário", 10, 10);
+        validator = StringValidator.isValidSting(data.getCLI_BIRTHDAY(), "Data de Aniversário", 8, 8);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
@@ -114,7 +114,7 @@ public class RClient implements RouterCrud<MClient> {
             return ResponseEntity.status(code).body(message);
         }
 
-        validator = StringValidator.isValidSting(data.getCLI_BIRTHDAY(), "Data de Aniversário", 10, 10);
+        validator = StringValidator.isValidSting(data.getCLI_BIRTHDAY(), "Data de Aniversário", 8, 8);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");

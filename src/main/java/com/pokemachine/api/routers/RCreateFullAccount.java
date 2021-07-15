@@ -122,7 +122,7 @@ public class RCreateFullAccount implements RouterCrud<MAccount> {
 
         }
 
-        validator = StringValidator.isValidSting(data.getClient().getCLI_BIRTHDAY(), "Data de Aniversário", 10, 10);
+        validator = StringValidator.isValidSting(data.getClient().getCLI_BIRTHDAY(), "Data de Aniversário", 8, 8);
 
         if (!validator.isEmpty()) {
             message.setCode(code).setMessage(validator).setError("");
