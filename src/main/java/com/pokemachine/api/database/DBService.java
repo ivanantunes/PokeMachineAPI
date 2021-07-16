@@ -31,7 +31,8 @@ public class DBService {
 
             SystemUtil.log("Conectando ao Banco de Dado.");
 
-            this.connection = DriverManager.getConnection(DBConfig.url, DBConfig.user, DBConfig.password);
+            String unicode="useSSL=false&autoReconnect=true&useUnicode=yes&characterEncoding=UTF-8";
+            this.connection = DriverManager.getConnection(DBConfig.url + "?" + unicode, DBConfig.user, DBConfig.password);
 
             SystemUtil.log("Conexão Realizada com Sucesso.");
 
